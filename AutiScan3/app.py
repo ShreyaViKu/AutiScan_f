@@ -23,6 +23,38 @@ def screening():
 def awareness():
     return render_template("awareness.html")
 
+# -------- 🎮 GAMES SECTION --------
+
+# Main Games Page
+@app.route("/games")
+def games_home():
+    return render_template("games/games_home.html")
+
+# Individual Game Pages
+@app.route("/flashcards")
+def flashcards():
+    return render_template("games/flashcards.html")
+
+@app.route("/emotion")
+def emotion():
+    return render_template("games/emotion.html")
+
+@app.route("/dragdrop")
+def dragdrop():
+    return render_template("games/dragdrop.html")
+
+@app.route("/voice")
+def voice():
+    return render_template("games/voice.html")
+
+@app.route("/routine")
+def routine():
+    return render_template("games/routine.html")
+
+@app.route("/progress")
+def progress():
+    return render_template("games/progress.html")
+
 # -------- AUTISM SUBPAGES --------
 
 @app.route("/what-is-autism")

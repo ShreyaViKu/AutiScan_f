@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emotion Game | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.game-wrapper {
+  padding: 30px;
+  text-align: center;
+}
+
+.instructions {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.emotion-img {
+  width: 150px;
+  transition: 0.3s;
+}
+
+.emotion-img:hover {
+  transform: scale(1.1);
+}
+
+.options button {
+  padding: 10px 15px;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #7a8cff;
+  color: white;
+  cursor: pointer;
+}
+
+.options button:hover {
+  background: #5f6de0;
+}
+
+.correct {
+  background: #c8f7c5 !important;
+}
+
+.wrong {
+  background: #f7c5c5 !important;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/screening">Screening</a>
+    <a href="/games">Therapy Games</a>
+  </nav>
+</header>
+
+<div class="game-wrapper">
+
+<h1>Emotion Recognition Game</h1>
+
+<!-- HOW TO PLAY -->
+<div class="instructions">
+  <h2>How to Play</h2>
+  <ul style="text-align:left;">
+    <li>👀 Look at the face</li>
+    <li>🤔 Think about the emotion</li>
+    <li>👉 Click the correct answer</li>
+    <li>✅ Green = correct | ❌ Red = wrong</li>
+    <li>🎯 Try to score maximum!</li>
+  </ul>
+</div>
+
+<!-- WHY HELPFUL -->
+<div class="instructions">
+  <h2>Why This Game Helps</h2>
+  <ul style="text-align:left;">
+    <li>🧠 Improves emotional understanding</li>
+    <li>👁 Enhances facial recognition skills</li>
+    <li>💬 Helps social communication</li>
+    <li>🎯 Builds focus and attention</li>
+    <li>😊 Teaches empathy and feelings</li>
+  </ul>
+</div>
+
+<!-- GAME AREA -->
+<div id="gameArea"></div>
+
+<p id="feedback"></p>
+
+</div>
+
+<script>
+
+// 10 EMOTIONS
+const emotions = [
+  {name:"happy", img:"https://cdn-icons-png.flaticon.com/512/742/742751.png"},
+  {name:"sad", img:"https://cdn-icons-png.flaticon.com/512/742/742752.png"},
+  {name:"angry", img:"https://cdn-icons-png.flaticon.com/512/742/742760.png"},
+  {name:"surprised", img:"https://cdn-icons-png.flaticon.com/512/742/742774.png"},
+  {name:"confused", img:"https://cdn-icons-png.flaticon.com/512/742/742757.png"},
+  {name:"tired", img:"https://cdn-icons-png.flaticon.com/512/742/742770.png"},
+  {name:"excited", img:"https://cdn-icons-png.flaticon.com/512/742/742759.png"},
+  {name:"scared", img:"https://cdn-icons-png.flaticon.com/512/742/742769.png"},
+  {name:"shy", img:"https://cdn-icons-png.flaticon.com/512/742/742756.png"},
+  {name:"bored", img:"https://cdn-icons-png.flaticon.com/512/742/742753.png"}
+];
+
+let index = 0;
+let score = 0;
+
+// LOAD QUESTION
+function loadEmotion(){
+
+  let current = emotions[index];
+
+  let options = shuffle(emotions).slice(0,4);
+
+  // ensure correct option included
+  if(!options.includes(current)){
+    options[0] = current;
+  }
+
+  let buttons = "";
+  options.forEach(opt => {
+    buttons += `<button onclick="checkAnswer('${opt.name}', '${current.name}')">${opt.name}</button>`;
+  });
+
+  document.getElementById("gameArea").innerHTML = `
+    <img src="${current.img}" class="emotion-img"><br><br>
+    <div class="options">${buttons}</div>
+  `;
+}
+
+// CHECK ANSWER
+function checkAnswer(selected, correct){
+
+  if(selected === correct){
+    score++;
+    document.getElementById("feedback").innerHTML = "✅ Correct!";
+  } else {
+    document.getElementById("feedback").innerHTML = "❌ Try Again!";
+  }
+
+  index++;
+
+  // SAVE SCORE
+  localStorage.setItem("emotion_score", score);
+  localStorage.setItem("emotion_total", emotions.length);
+
+  if(index < emotions.length){
+    setTimeout(loadEmotion, 800);
+  } else {
+    document.getElementById("gameArea").innerHTML = `
+      <h2>Game Completed!</h2>
+      <h3>Score: ${score}/${emotions.length}</h3>
+    `;
+  }
+}
+
+// SHUFFLE FUNCTION
+function shuffle(array){
+  return array.sort(() => Math.random() - 0.5);
+}
+
+// START
+loadEmotion();
+
+</script>
+
+</body>
+</html>

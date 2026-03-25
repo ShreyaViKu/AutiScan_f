@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voice Learning | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.game-wrapper {
+  padding: 30px;
+  text-align: center;
+}
+
+.instructions {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.option-card {
+  width: 130px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.option-card:hover {
+  transform: scale(1.1);
+}
+
+.option-card img {
+  width: 100%;
+}
+
+.correct {
+  background: #c8f7c5 !important;
+}
+
+.wrong {
+  background: #f7c5c5 !important;
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #7a8cff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #5f6de0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/screening">Screening</a>
+    <a href="/games">Therapy Games</a>
+  </nav>
+</header>
+
+<div class="game-wrapper">
+
+<h1>Voice Learning Game 🔊</h1>
+
+<!-- HOW TO PLAY -->
+<div class="instructions">
+  <h2>How to Play</h2>
+  <ul style="text-align:left;">
+    <li>🔊 Click "Hear Word"</li>
+    <li>👀 Look at options</li>
+    <li>👉 Select correct image</li>
+    <li>✅ Green = correct | ❌ Red = wrong</li>
+    <li>🎯 Improve listening skills</li>
+  </ul>
+</div>
+
+<!-- WHY HELPFUL -->
+<div class="instructions">
+  <h2>Why This Game Helps</h2>
+  <ul style="text-align:left;">
+    <li>🎧 Improves listening ability</li>
+    <li>🧠 Enhances auditory processing</li>
+    <li>💬 Supports speech development</li>
+    <li>🎯 Builds attention</li>
+    <li>😊 Improves word recognition</li>
+  </ul>
+</div>
+
+<!-- BUTTON -->
+<button onclick="speakWord()">🔊 Hear Word</button>
+
+<!-- GAME AREA -->
+<div class="options" id="options"></div>
+
+<p id="feedback"></p>
+
+</div>
+
+<script>
+
+// DATA (10 ITEMS)
+const data = [
+  {name:"Apple", img:"https://cdn-icons-png.flaticon.com/512/415/415682.png"},
+  {name:"Dog", img:"https://cdn-icons-png.flaticon.com/512/616/616408.png"},
+  {name:"Car", img:"https://cdn-icons-png.flaticon.com/512/743/743922.png"},
+  {name:"Cat", img:"https://cdn-icons-png.flaticon.com/512/616/616430.png"},
+  {name:"Ball", img:"https://cdn-icons-png.flaticon.com/512/861/861512.png"},
+  {name:"Book", img:"https://cdn-icons-png.flaticon.com/512/29/29302.png"},
+  {name:"Fish", img:"https://cdn-icons-png.flaticon.com/512/616/616554.png"},
+  {name:"Cup", img:"https://cdn-icons-png.flaticon.com/512/1046/1046784.png"},
+  {name:"Chair", img:"https://cdn-icons-png.flaticon.com/512/2965/2965567.png"},
+  {name:"Bus", img:"https://cdn-icons-png.flaticon.com/512/61/61231.png"}
+];
+
+let index = 0;
+let score = 0;
+
+// SPEAK FUNCTION
+function speakWord(){
+  let word = data[index].name;
+  let msg = new SpeechSynthesisUtterance(word);
+  speechSynthesis.speak(msg);
+}
+
+// LOAD OPTIONS
+function loadOptions(){
+
+  let correct = data[index];
+
+  let options = shuffle(data).slice(0,4);
+
+  if(!options.includes(correct)){
+    options[0] = correct;
+  }
+
+  let html = "";
+
+  options.forEach(opt => {
+    html += `
+      <div class="option-card" onclick="checkAnswer('${opt.name}', this)">
+        <img src="${opt.img}">
+        <p>${opt.name}</p>
+      </div>
+    `;
+  });
+
+  document.getElementById("options").innerHTML = html;
+}
+
+// CHECK
+function checkAnswer(selected, element){
+
+  let correct = data[index].name;
+
+  if(selected === correct){
+    element.classList.add("correct");
+    score++;
+    document.getElementById("feedback").innerHTML = "✅ Correct!";
+  } else {
+    element.classList.add("wrong");
+    document.getElementById("feedback").innerHTML = "❌ Try Again!";
+  }
+
+  index++;
+
+  // SAVE
+  localStorage.setItem("voice_score", score);
+  localStorage.setItem("voice_total", data.length);
+
+  if(index < data.length){
+    setTimeout(loadOptions, 1000);
+  } else {
+    document.getElementById("options").innerHTML =
+      `<h2>Game Completed! Score: ${score}/${data.length}</h2>`;
+  }
+}
+
+// SHUFFLE
+function shuffle(arr){
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+// START
+loadOptions();
+
+</script>
+
+</body>
+</html>

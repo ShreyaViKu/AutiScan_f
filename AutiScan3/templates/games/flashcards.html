@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Flashcards | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.game-wrapper {
+  padding: 30px;
+  text-align: center;
+}
+
+.instructions {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* GRID */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+/* CARD */
+.card {
+  perspective: 1000px;
+}
+
+.card-inner {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+/* FLIP */
+.card.flip .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  backface-visibility: hidden;
+}
+
+.card-front {
+  background: #fff;
+}
+
+.card-front img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.card-back {
+  background: #7a8cff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transform: rotateY(180deg);
+}
+
+/* PAGINATION */
+.pagination {
+  margin: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #7a8cff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #5f6de0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/screening">Screening</a>
+    <a href="/games">Therapy Games</a>
+  </nav>
+</header>
+
+<div class="game-wrapper">
+
+<h1>Flashcards Learning Game</h1>
+
+<!-- HOW TO PLAY -->
+<div class="instructions">
+  <h2>How to Play</h2>
+  <ul style="text-align:left;">
+    <li>👀 Look at the image</li>
+    <li>👆 Click the card</li>
+    <li>🔄 It flips to show name</li>
+    <li>⏳ It flips back automatically</li>
+    <li>🎯 Learn and repeat</li>
+  </ul>
+</div>
+
+<!-- WHY HELPFUL -->
+<div class="instructions">
+  <h2>Why This Game Helps</h2>
+  <ul style="text-align:left;">
+    <li>🧠 Improves memory and recognition</li>
+    <li>👁 Enhances visual learning</li>
+    <li>💬 Builds vocabulary</li>
+    <li>🎯 Improves attention span</li>
+    <li>😊 Supports cognitive development</li>
+  </ul>
+</div>
+
+<!-- CARDS -->
+<div id="cardsContainer" class="cards-container"></div>
+
+<!-- PAGINATION -->
+<div class="pagination">
+  <button onclick="prevPage()">Previous</button>
+  <button onclick="nextPage()">Next</button>
+</div>
+
+</div>
+
+<script>
+
+// 24 FLASHCARDS (ONLINE)
+const cards = [
+  {name:"Apple", img:"https://cdn-icons-png.flaticon.com/512/415/415682.png"},
+  {name:"Dog", img:"https://cdn-icons-png.flaticon.com/512/616/616408.png"},
+  {name:"Car", img:"https://cdn-icons-png.flaticon.com/512/743/743922.png"},
+  {name:"Banana", img:"https://cdn-icons-png.flaticon.com/512/590/590685.png"},
+  {name:"Cat", img:"https://cdn-icons-png.flaticon.com/512/616/616430.png"},
+  {name:"Ball", img:"https://cdn-icons-png.flaticon.com/512/861/861512.png"},
+  {name:"Book", img:"https://cdn-icons-png.flaticon.com/512/29/29302.png"},
+  {name:"Carrot", img:"https://cdn-icons-png.flaticon.com/512/2909/2909762.png"},
+  {name:"Fish", img:"https://cdn-icons-png.flaticon.com/512/616/616554.png"},
+  {name:"Cup", img:"https://cdn-icons-png.flaticon.com/512/1046/1046784.png"},
+  {name:"Chair", img:"https://cdn-icons-png.flaticon.com/512/2965/2965567.png"},
+  {name:"Clock", img:"https://cdn-icons-png.flaticon.com/512/2921/2921222.png"},
+  {name:"Tree", img:"https://cdn-icons-png.flaticon.com/512/427/427735.png"},
+  {name:"Sun", img:"https://cdn-icons-png.flaticon.com/512/869/869869.png"},
+  {name:"Moon", img:"https://cdn-icons-png.flaticon.com/512/1163/1163661.png"},
+  {name:"House", img:"https://cdn-icons-png.flaticon.com/512/69/69524.png"},
+  {name:"Bus", img:"https://cdn-icons-png.flaticon.com/512/61/61231.png"},
+  {name:"Milk", img:"https://cdn-icons-png.flaticon.com/512/3050/3050158.png"},
+  {name:"Egg", img:"https://cdn-icons-png.flaticon.com/512/837/837560.png"},
+  {name:"Bed", img:"https://cdn-icons-png.flaticon.com/512/3063/3063822.png"},
+  {name:"Shoe", img:"https://cdn-icons-png.flaticon.com/512/892/892458.png"},
+  {name:"Bag", img:"https://cdn-icons-png.flaticon.com/512/3081/3081840.png"},
+  {name:"Phone", img:"https://cdn-icons-png.flaticon.com/512/15/15874.png"},
+  {name:"Laptop", img:"https://cdn-icons-png.flaticon.com/512/1792/1792886.png"}
+];
+
+let page = 0;
+let perPage = 6;
+
+function loadCards(){
+
+  let start = page * perPage;
+  let end = start + perPage;
+  let current = cards.slice(start, end);
+
+  let html = "";
+
+  current.forEach((card, i) => {
+    html += `
+    <div class="card" onclick="flipCard(this)">
+      <div class="card-inner">
+        <div class="card-front">
+          <img src="${card.img}">
+        </div>
+        <div class="card-back">
+          ${card.name}
+        </div>
+      </div>
+    </div>
+    `;
+  });
+
+  document.getElementById("cardsContainer").innerHTML = html;
+}
+
+function flipCard(card){
+  card.classList.add("flip");
+
+  setTimeout(()=>{
+    card.classList.remove("flip");
+  }, 1500);
+}
+
+function nextPage(){
+  if((page+1)*perPage < cards.length){
+    page++;
+    loadCards();
+  }
+}
+
+function prevPage(){
+  if(page > 0){
+    page--;
+    loadCards();
+  }
+}
+
+loadCards();
+
+</script>
+
+</body>
+</html>

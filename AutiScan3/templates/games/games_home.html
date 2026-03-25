@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Therapy Games | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+body {
+  overflow-x: hidden;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hero h1 {
+  font-size: 32px;
+}
+
+.hero p {
+  color: #666;
+}
+
+/* GRID */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  padding: 30px;
+}
+
+/* CARD */
+.game-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* ICON */
+.game-icon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+/* TITLE */
+.game-card h3 {
+  margin-bottom: 10px;
+}
+
+/* DESCRIPTION */
+.game-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ARROW */
+.arrow {
+  position: absolute;
+  right: 20px;
+  bottom: 15px;
+  font-size: 22px;
+  transition: 0.3s;
+}
+
+.game-card:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* FLOATING EMOJIS */
+.floating {
+  position: fixed;
+  font-size: 24px;
+  animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px);}
+  50% { transform: translateY(-20px);}
+  100% { transform: translateY(0px);}
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 30px;
+  color: #666;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/screening">Screening</a>
+    <a href="/games">Therapy Games</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>🎮 Fun Therapy Games</h1>
+  <p>Learn, Play & Grow 🌈</p>
+</section>
+
+<!-- GAMES GRID -->
+<section class="games-grid">
+
+  <!-- FLASHCARDS -->
+  <div class="game-card" onclick="go('/flashcards')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="game-icon">
+    <h3>Flashcards 🧠</h3>
+    <p>Learn everyday objects with fun flip cards</p>
+    <div class="arrow">➡</div>
+  </div>
+
+  <!-- EMOTION -->
+  <div class="game-card" onclick="go('/emotion')">
+    <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="game-icon">
+    <h3>Emotion Game 😊</h3>
+    <p>Recognize feelings and expressions</p>
+    <div class="arrow">➡</div>
+  </div>
+
+  <!-- DRAG DROP -->
+  <div class="game-card" onclick="go('/dragdrop')">
+    <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" class="game-icon">
+    <h3>Match Game 🎯</h3>
+    <p>Drag and match objects correctly</p>
+    <div class="arrow">➡</div>
+  </div>
+
+  <!-- VOICE -->
+  <div class="game-card" onclick="go('/voice')">
+    <img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" class="game-icon">
+    <h3>Voice Learning 🔊</h3>
+    <p>Hear and learn words easily</p>
+    <div class="arrow">➡</div>
+  </div>
+
+  <!-- ROUTINE -->
+  <div class="game-card" onclick="go('/routine')">
+    <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png" class="game-icon">
+    <h3>Daily Routine 🌞</h3>
+    <p>Build daily habits step-by-step</p>
+    <div class="arrow">➡</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="game-card" onclick="go('/progress')">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="game-icon">
+    <h3>Progress 📊</h3>
+    <p>Track your improvement</p>
+    <div class="arrow">➡</div>
+  </div>
+
+</section>
+
+<!-- FLOATING EMOJIS -->
+<div class="floating" style="top:10%; left:5%;">😊</div>
+<div class="floating" style="top:50%; left:90%;">🌈</div>
+<div class="floating" style="top:80%; left:10%;">⭐</div>
+<div class="floating" style="top:30%; left:80%;">🎈</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Made with ❤️ for better learning | AutiScan</p>
+</footer>
+
+<script>
+
+function go(path){
+  window.location.href = path;
+}
+
+</script>
+
+</body>
+</html>

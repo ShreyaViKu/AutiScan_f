@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Daily Routine | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.game-wrapper {
+  padding: 30px;
+  text-align: center;
+}
+
+.instructions {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* CARDS */
+.routine-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.routine-card {
+  width: 120px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 12px;
+  cursor: grab;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.routine-card:hover {
+  transform: scale(1.1);
+}
+
+.routine-card img {
+  width: 100%;
+}
+
+.drop-zone {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.drop-box {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+}
+
+.correct {
+  background: #c8f7c5 !important;
+}
+
+.wrong {
+  background: #f7c5c5 !important;
+}
+
+button {
+  padding: 10px 15px;
+  margin-top: 20px;
+  border-radius: 8px;
+  border: none;
+  background: #7a8cff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #5f6de0;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/screening">Screening</a>
+    <a href="/games">Therapy Games</a>
+  </nav>
+</header>
+
+<div class="game-wrapper">
+
+<h1>Daily Routine Game 🌞</h1>
+
+<!-- HOW TO PLAY -->
+<div class="instructions">
+  <h2>How to Play</h2>
+  <ul style="text-align:left;">
+    <li>👀 Look at the activities</li>
+    <li>🖐 Drag them in correct order</li>
+    <li>📅 Arrange daily routine steps</li>
+    <li>✅ Correct order = green</li>
+    <li>🎯 Learn daily habits</li>
+  </ul>
+</div>
+
+<!-- WHY HELPFUL -->
+<div class="instructions">
+  <h2>Why This Game Helps</h2>
+  <ul style="text-align:left;">
+    <li>🧠 Builds routine understanding</li>
+    <li>📅 Helps time sequencing</li>
+    <li>🎯 Improves focus</li>
+    <li>🧩 Enhances logical thinking</li>
+    <li>😊 Encourages independence</li>
+  </ul>
+</div>
+
+<!-- DRAG ITEMS -->
+<div class="routine-container" id="dragItems"></div>
+
+<!-- DROP AREA -->
+<div class="drop-zone" id="dropZone"></div>
+
+<button onclick="checkOrder()">Check Order</button>
+
+<p id="result"></p>
+
+</div>
+
+<script>
+
+let score = 0;
+
+// ROUTINE STEPS (CORRECT ORDER)
+const steps = [
+  {name:"Wake Up", img:"https://cdn-icons-png.flaticon.com/512/3019/3019011.png"},
+  {name:"Brush Teeth", img:"https://cdn-icons-png.flaticon.com/512/2922/2922510.png"},
+  {name:"Bath", img:"https://cdn-icons-png.flaticon.com/512/1046/1046857.png"},
+  {name:"Eat Breakfast", img:"https://cdn-icons-png.flaticon.com/512/1046/1046784.png"},
+  {name:"Go to School", img:"https://cdn-icons-png.flaticon.com/512/1946/1946436.png"}
+];
+
+// SHUFFLE
+function shuffle(array){
+  return array.sort(() => Math.random() - 0.5);
+}
+
+let shuffled = shuffle([...steps]);
+
+// LOAD
+function loadGame(){
+
+  let dragHTML = "";
+  let dropHTML = "";
+
+  shuffled.forEach(step => {
+    dragHTML += `
+      <div class="routine-card" draggable="true"
+      ondragstart="drag(event)" id="${step.name}">
+        <img src="${step.img}">
+        <p>${step.name}</p>
+      </div>`;
+  });
+
+  steps.forEach((_, index) => {
+    dropHTML += `
+      <div class="drop-box"
+      ondrop="drop(event)"
+      ondragover="allowDrop(event)"
+      data-index="${index}">
+      </div>`;
+  });
+
+  document.getElementById("dragItems").innerHTML = dragHTML;
+  document.getElementById("dropZone").innerHTML = dropHTML;
+}
+
+function allowDrop(e){ e.preventDefault(); }
+
+function drag(e){
+  e.dataTransfer.setData("text", e.target.id);
+}
+
+function drop(e){
+  e.preventDefault();
+  let data = e.dataTransfer.getData("text");
+
+  e.target.innerHTML = data;
+  e.target.setAttribute("data-value", data);
+}
+
+// CHECK ORDER
+function checkOrder(){
+
+  let boxes = document.querySelectorAll(".drop-box");
+  score = 0;
+
+  boxes.forEach((box, index) => {
+    let val = box.getAttribute("data-value");
+
+    if(val === steps[index].name){
+      box.classList.add("correct");
+      score++;
+    } else {
+      box.classList.add("wrong");
+    }
+  });
+
+  document.getElementById("result").innerHTML =
+    `Score: ${score}/${steps.length}`;
+
+  // SAVE FOR PROGRESS
+  localStorage.setItem("routine_score", score);
+  localStorage.setItem("routine_total", steps.length);
+}
+
+loadGame();
+
+</script>
+
+</body>
+</html>

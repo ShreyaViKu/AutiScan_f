@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Drag & Drop Game | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+/* KEEP YOUR THEME + ADD GAME STYLE */
+
+.game-wrapper {
+  padding: 30px;
+  text-align: center;
+}
+
+.instructions {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.drag-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.drag-container img {
+  width: 90px;
+  cursor: grab;
+  transition: transform 0.3s;
+}
+
+.drag-container img:hover {
+  transform: scale(1.1);
+}
+
+.drop-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.drop-box {
+  width: 110px;
+  height: 110px;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: #f9f9f9;
+  transition: 0.3s;
+}
+
+.drop-box:hover {
+  background: #eef;
+}
+
+.correct {
+  background: #c8f7c5 !important;
+}
+
+.wrong {
+  background: #f7c5c5 !important;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/screening">Screening</a>
+    <a href="/games">Therapy Games</a>
+  </nav>
+</header>
+
+<div class="game-wrapper">
+
+<h1>Drag & Drop Matching Game</h1>
+
+<!-- INSTRUCTIONS -->
+<div class="instructions">
+  <h2>How to Play</h2>
+  <ul style="text-align:left;">
+    <li>👀 Look at the images carefully</li>
+    <li>🖐 Drag the image</li>
+    <li>📦 Drop it on the correct word</li>
+    <li>✅ Green = correct | ❌ Red = wrong</li>
+    <li>🎯 Try to match all correctly!</li>
+  </ul>
+</div>
+<div class="instructions">
+  <h2>Why This Game Helps</h2>
+  <ul style="text-align:left;">
+    <li>🧠 Improves memory and recognition skills</li>
+    <li>👁 Enhances visual learning ability</li>
+    <li>🖐 Develops motor coordination</li>
+    <li>🎯 Builds focus and attention</li>
+    <li>💡 Helps in understanding objects and language</li>
+  </ul>
+</div>
+
+<!-- DRAG ITEMS -->
+<div class="drag-container" id="dragItems"></div>
+
+<!-- DROP BOXES -->
+<div class="drop-container" id="dropBoxes"></div>
+
+<p id="feedback"></p>
+
+</div>
+
+<script>
+
+let score = 0;
+let total = 10;
+
+const items = [
+  {name:"apple", img:"https://cdn-icons-png.flaticon.com/512/415/415733.png"},
+  {name:"dog", img:"https://cdn-icons-png.flaticon.com/512/616/616408.png"},
+  {name:"car", img:"https://cdn-icons-png.flaticon.com/512/744/744465.png"},
+  {name:"banana", img:"https://cdn-icons-png.flaticon.com/512/590/590685.png"},
+  {name:"cat", img:"https://cdn-icons-png.flaticon.com/512/616/616430.png"},
+  {name:"ball", img:"https://cdn-icons-png.flaticon.com/512/861/861512.png"},
+  {name:"book", img:"https://cdn-icons-png.flaticon.com/512/29/29302.png"},
+  {name:"carrot", img:"https://cdn-icons-png.flaticon.com/512/2909/2909762.png"},
+  {name:"fish", img:"https://cdn-icons-png.flaticon.com/512/616/616554.png"},
+  {name:"cup", img:"https://cdn-icons-png.flaticon.com/512/1046/1046784.png"}
+];
+
+function loadGame(){
+  let dragHTML = "";
+  let dropHTML = "";
+
+  items.forEach(item => {
+    dragHTML += `<img src="${item.img}" id="${item.name}" draggable="true" ondragstart="drag(event)">`;
+
+    dropHTML += `
+      <div class="drop-box" data-match="${item.name}"
+        ondrop="drop(event)" ondragover="allowDrop(event)">
+        ${item.name.toUpperCase()}
+      </div>`;
+  });
+
+  document.getElementById("dragItems").innerHTML = dragHTML;
+  document.getElementById("dropBoxes").innerHTML = dropHTML;
+}
+
+function allowDrop(e){ e.preventDefault(); }
+
+function drag(e){
+  e.dataTransfer.setData("text", e.target.id);
+}
+
+function drop(e){
+  e.preventDefault();
+
+  let dragged = e.dataTransfer.getData("text");
+  let correct = e.target.getAttribute("data-match");
+
+  if(dragged === correct){
+    e.target.classList.add("correct");
+    score++;
+  } else {
+    e.target.classList.add("wrong");
+  }
+
+  document.getElementById("feedback").innerHTML = `Score: ${score}/${total}`;
+
+  // SAVE RESULT
+  localStorage.setItem("drag_score", score);
+  localStorage.setItem("drag_total", total);
+}
+
+// LOAD
+loadGame();
+
+</script>
+
+</body>
+</html>

@@ -79,6 +79,33 @@ nav a:hover {
 
 /* ================= HERO SECTION ================= */
 
+.games-container {
+  display: flex;
+  gap: 20px;
+  padding: 40px;
+  justify-content: center;
+}
+
+.game-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.game-area {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.card-box {
+  background: #eef;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
 .hero {
   text-align: center;
   padding: 120px 20px;

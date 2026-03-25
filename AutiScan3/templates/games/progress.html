@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Progress Report | AutiScan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+.wrapper {
+  padding: 30px;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 15px 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+}
+
+.progress-bar {
+  height: 20px;
+  border-radius: 10px;
+  background: #ddd;
+  margin-top: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+}
+
+.good { background: #4caf50; }
+.avg { background: #ff9800; }
+.bad { background: #f44336; }
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="logo">
+    <div class="logo-icon">♡</div>
+    <span>AutiScan</span>
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/games">Games</a>
+  </nav>
+</header>
+
+<div class="wrapper">
+
+<h2>📊 Child Progress Report</h2>
+
+<div id="report"></div>
+
+</div>
+
+<script>
+
+// FETCH SCORES
+let games = [
+  {name:"Flashcards", key:"flash_score", total:"flash_total"},
+  {name:"Emotion", key:"emotion_score", total:"emotion_total"},
+  {name:"Drag & Drop", key:"drag_score", total:"drag_total"},
+  {name:"Voice", key:"voice_score", total:"voice_total"},
+  {name:"Routine", key:"routine_score", total:"routine_total"}
+];
+
+let html = "";
+let overallScore = 0;
+let overallTotal = 0;
+
+// ANALYSIS FUNCTION
+function getAnalysis(percent){
+
+  if(percent >= 80){
+    return {
+      msg:"🌟 Excellent performance! Strong understanding.",
+      color:"good",
+      improve:"Keep practicing for consistency."
+    };
+  }
+  else if(percent >= 50){
+    return {
+      msg:"👍 Good progress, but needs improvement.",
+      color:"avg",
+      improve:"Practice regularly to strengthen skills."
+    };
+  }
+  else{
+    return {
+      msg:"⚠ Needs improvement. Skills are developing.",
+      color:"bad",
+      improve:"Focus on repeated practice and guidance."
+    };
+  }
+}
+
+// LOOP GAMES
+games.forEach(g => {
+
+  let score = parseInt(localStorage.getItem(g.key)) || 0;
+  let total = parseInt(localStorage.getItem(g.total)) || 10;
+
+  let percent = Math.round((score/total)*100);
+
+  overallScore += score;
+  overallTotal += total;
+
+  let analysis = getAnalysis(percent);
+
+  html += `
+    <div class="card">
+      <h3>${g.name}</h3>
+      <p>Score: ${score}/${total} (${percent}%)</p>
+
+      <div class="progress-bar">
+        <div class="progress-fill ${analysis.color}" style="width:${percent}%"></div>
+      </div>
+
+      <p>${analysis.msg}</p>
+      <p><b>Improvement:</b> ${analysis.improve}</p>
+    </div>
+  `;
+});
+
+// OVERALL
+let overallPercent = Math.round((overallScore/overallTotal)*100);
+let overallAnalysis = getAnalysis(overallPercent);
+
+html += `
+  <div class="card">
+    <h2>Overall Performance</h2>
+    <p>Total Score: ${overallScore}/${overallTotal} (${overallPercent}%)</p>
+
+    <div class="progress-bar">
+      <div class="progress-fill ${overallAnalysis.color}" style="width:${overallPercent}%"></div>
+    </div>
+
+    <p>${overallAnalysis.msg}</p>
+    <p><b>Suggestion:</b> ${overallAnalysis.improve}</p>
+  </div>
+`;
+
+// DETAILED INSIGHTS
+html += `
+<div class="card">
+<h3>🧠 Detailed Insights</h3>
+
+<ul>
+<li><b>Flashcards:</b> Improves memory & vocabulary</li>
+<li><b>Emotion Game:</b> Builds social understanding</li>
+<li><b>Drag & Drop:</b> Enhances logical thinking</li>
+<li><b>Voice Game:</b> Develops listening skills</li>
+<li><b>Routine Game:</b> Builds daily habits</li>
+</ul>
+
+<p>
+Lower scores indicate areas where the child may need more practice.
+Regular interaction with these games helps improve cognitive and behavioral skills.
+</p>
+
+</div>
+`;
+
+document.getElementById("report").innerHTML = html;
+
+</script>
+
+</body>
+</html>
