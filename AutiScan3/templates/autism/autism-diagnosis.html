@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Autism Diagnosis | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-left"><div class="logo-circle"><span>♡</span></div><span class="logo-text">AutiScan</span></div>
+      <div class="nav-right">
+        <a href="../index.html">Home</a><a href="../about.html">About Autism</a>
+        <a href="../screening.html" class="cta-btn">START SCREENING</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="wa-hero">
+    <div class="wa-hero-inner">
+      <p class="wa-label">THE DIAGNOSTIC PROCESS</p>
+      <h1>Autism Diagnosis</h1>
+      <p class="wa-hero-sub">Understanding how autism is diagnosed helps families navigate the process with confidence.</p>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>How Is Autism Diagnosed?</h2>
+      <p>There is no single medical test for autism. Diagnosis is based on behavioral observation, developmental history, and clinical evaluation. It typically involves a multidisciplinary team including pediatricians, psychologists, and speech-language pathologists.</p>
+      <p>Diagnosis is guided by criteria in the Diagnostic and Statistical Manual of Mental Disorders (DSM-5), which outlines the core features of autism across social communication and restricted/repetitive behaviors.</p>
+    </div>
+  </section>
+
+  <section class="section-standard alt-soft">
+    <div class="container-standard">
+      <h2>The Diagnostic Process</h2>
+      <div class="steps-pro-grid">
+        <div class="step-pro"><span>01</span><h4>Developmental Screening</h4><p>Initial screening by a pediatrician, often using standardized tools like the M-CHAT-R.</p></div>
+        <div class="step-pro"><span>02</span><h4>Comprehensive Evaluation</h4><p>In-depth assessment by specialists including observation, cognitive testing, and parent interviews.</p></div>
+        <div class="step-pro"><span>03</span><h4>Diagnosis & Support Plan</h4><p>If diagnosed, a support plan is developed to guide therapy, education, and family resources.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>Who Can Diagnose Autism?</h2>
+      <div class="wa-grid">
+        <div>Developmental pediatricians</div>
+        <div>Child psychiatrists</div>
+        <div>Clinical psychologists</div>
+        <div>Pediatric neurologists</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content light">
+    <div class="wa-container">
+      <h2>Diagnosis Across the Lifespan</h2>
+      <p>While autism is most often diagnosed in childhood, many individuals — particularly women and those with milder support needs — are not diagnosed until adolescence or adulthood.</p>
+      <p>A late diagnosis can bring clarity and access to support. It is never too late to seek evaluation if you suspect autism in yourself or a family member.</p>
+    </div>
+  </section>
+
+  <section class="wa-content accent">
+    <div class="wa-container">
+      <h2>After Diagnosis: What Next?</h2>
+      <p>A diagnosis is not an endpoint — it is the beginning of a pathway to understanding and support. Early intervention, therapy, community resources, and family education all contribute to better outcomes.</p>
+      <p>AutiScan's screening tool is designed as a first step — not a replacement for professional evaluation. If results suggest potential indicators, we recommend consulting a qualified specialist.</p>
+    </div>
+  </section>
+
+  <section class="topic-nav">
+    <div class="topic-nav-inner">
+      <h3>Explore Autism Topics</h3>
+      <div class="topic-links">
+        <a href="what-is-autism.html">What is Autism?</a>
+        <a href="autism-screening.html">Autism Screening</a>
+        <a href="causes-of-autism.html">What Causes Autism?</a>
+        <a href="vaccines-and-autism.html">Do Vaccines Cause Autism?</a>
+        <a href="signs-and-symptoms.html">Signs & Symptoms</a>
+        <a href="autism-diagnosis.html">Autism Diagnosis</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><div class="logo-icon">♡</div><span style="color:white;">AutiScan</span></div><p>An AI-powered early autism screening platform.</p></div>
+      <div class="footer-col"><h4>Screening</h4><a href="../screening.html">Start Screening</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="what-is-autism.html">What is Autism?</a><a href="signs-and-symptoms.html">Signs & Symptoms</a></div>
+      <div class="footer-col"><h4>About</h4><a href="../about.html">About Autism</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 AutiScan. For informational purposes only.</p></div>
+  </footer>
+  <script>
+    const links = document.querySelectorAll(".topic-links a");
+    const current = window.location.pathname;
+    links.forEach(link => {
+      if (current.includes(link.getAttribute("href"))) link.classList.add("active-topic");
+      else link.classList.remove("active-topic");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vaccines & Autism | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-left"><div class="logo-circle"><span>♡</span></div><span class="logo-text">AutiScan</span></div>
+      <div class="nav-right">
+        <a href="../index.html">Home</a><a href="../about.html">About Autism</a>
+        <a href="../screening.html" class="cta-btn">START SCREENING</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="wa-hero">
+    <div class="wa-hero-inner">
+      <p class="wa-label">MYTH VS. SCIENCE</p>
+      <h1>Do Vaccines Cause Autism?</h1>
+      <p class="wa-hero-sub">The scientific consensus is definitive: vaccines do not cause autism. Here's the evidence.</p>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>The Short Answer: No.</h2>
+      <p>Extensive scientific research involving millions of children across multiple countries has found <strong>no link</strong> between vaccines and autism. This includes the MMR (measles-mumps-rubella) vaccine and all other childhood immunizations.</p>
+      <p>The original 1998 study claiming a link between MMR vaccines and autism was thoroughly discredited, retracted by the journal that published it (The Lancet), and the lead author's medical license was revoked due to ethical violations and data falsification.</p>
+    </div>
+  </section>
+
+  <section class="wa-content light">
+    <div class="wa-container">
+      <h2>The Science Is Clear</h2>
+      <div class="wa-grid">
+        <div>🔬 Over 1.2 million children studied in a Danish cohort — no link found</div>
+        <div>📊 WHO, CDC, AAP all confirm vaccines do not cause autism</div>
+        <div>✅ Thimerosal was removed from vaccines as a precaution — rates of autism did not decrease</div>
+        <div>📋 The original Wakefield study was fraudulent and fully retracted</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content accent">
+    <div class="wa-container">
+      <h2>Why the Myth Persists</h2>
+      <p>Autism symptoms often become more noticeable around 12–18 months — the same time many childhood vaccines are given. This timing creates a perceived correlation that has no causal basis.</p>
+      <p>Parents understandably look for explanations when their child is diagnosed. The vaccine myth provided an apparent answer — but one that was fabricated and has caused real harm by reducing vaccine rates and allowing preventable diseases to spread.</p>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>The Real Risk of Skipping Vaccines</h2>
+      <p>Choosing not to vaccinate based on the discredited autism myth puts children at risk of serious, preventable diseases including measles, whooping cough, and rubella.</p>
+      <p>Healthcare organizations worldwide — including the World Health Organization, American Academy of Pediatrics, and every major national health authority — affirm that vaccines are safe, effective, and do not cause autism.</p>
+    </div>
+  </section>
+
+  <section class="topic-nav">
+    <div class="topic-nav-inner">
+      <h3>Explore Autism Topics</h3>
+      <div class="topic-links">
+        <a href="what-is-autism.html">What is Autism?</a>
+        <a href="autism-screening.html">Autism Screening</a>
+        <a href="causes-of-autism.html">What Causes Autism?</a>
+        <a href="vaccines-and-autism.html">Do Vaccines Cause Autism?</a>
+        <a href="signs-and-symptoms.html">Signs & Symptoms</a>
+        <a href="autism-diagnosis.html">Autism Diagnosis</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><div class="logo-icon">♡</div><span style="color:white;">AutiScan</span></div><p>An AI-powered early autism screening platform.</p></div>
+      <div class="footer-col"><h4>Screening</h4><a href="../screening.html">Start Screening</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="what-is-autism.html">What is Autism?</a><a href="causes-of-autism.html">Causes</a></div>
+      <div class="footer-col"><h4>About</h4><a href="../about.html">About Autism</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 AutiScan. For informational purposes only.</p></div>
+  </footer>
+  <script>
+    const links = document.querySelectorAll(".topic-links a");
+    const current = window.location.pathname;
+    links.forEach(link => {
+      if (current.includes(link.getAttribute("href"))) link.classList.add("active-topic");
+      else link.classList.remove("active-topic");
+    });
+  </script>
+</body>
+</html>

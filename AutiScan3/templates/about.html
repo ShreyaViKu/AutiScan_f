@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Autism | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ FIXED CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </div>
+
+    <!-- ✅ FIXED LINKS -->
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About Autism</a>
+      <a href="/#how">How It Works</a>
+      <a href="/screening" class="nav-btn">START SCREENING</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="about-hero">
+    <div class="about-hero-content">
+      <div class="hero-badge">ℹ Understanding · Acceptance · Support</div>
+      <h1>Understanding Autism Spectrum Disorder</h1>
+      <p>Evidence-based information to help you understand autism.</p>
+    </div>
+  </section>
+
+  <!-- KNOWLEDGE HUB -->
+  <section class="about-knowledge">
+    <div class="knowledge-wrapper">
+
+      <div class="knowledge-nav">
+        <h3>Autism Topics</h3>
+
+        <!-- ✅ FIXED LINKS -->
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/autism-screening-info">Autism Screening</a>
+        <a href="/causes">What Causes Autism?</a>
+        <a href="/vaccines">Vaccines & Autism</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+      </div>
+
+      <div class="knowledge-content">
+        <div class="knowledge-text">
+          <h2>Explore Evidence-Based Information</h2>
+          <p>Autism is complex and often misunderstood.</p>
+        </div>
+
+        <!-- ✅ FIXED IMAGE -->
+        <div class="knowledge-image">
+          <img src="{{ url_for('static', filename='images/asd.jpeg') }}" alt="Autism">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Ready to Take the First Step?</h2>
+
+      <!-- ✅ FIXED BUTTON -->
+      <a href="/screening">
+        <button class="cta-btn">Start Screening Now →</button>
+      </a>
+
+      <p class="cta-note">Free • Confidential • Not a diagnosis</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">♡</div>
+          <span style="color:white;">AutiScan</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Screening</h4>
+        <a href="/screening">Parent/Caregiver</a>
+        <a href="/screening">Self-Assessment</a>
+        <a href="/#how">How It Works</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/causes">Causes</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="/">Home</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 AutiScan</p>
+    </div>
+  </footer>
+
+</body>
+</html>
