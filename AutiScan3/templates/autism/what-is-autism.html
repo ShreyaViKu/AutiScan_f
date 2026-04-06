@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What is Autism? | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!--  FIXED CSS (IMPORTANT) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="navbar">
+  <div class="nav-container">
+    
+    <!-- LEFT: LOGO -->
+    <div class="nav-left">
+      <div class="logo-circle">
+        <span>♡</span>
+      </div>
+      <span class="logo-text">AutiScan</span>
+    </div>
+
+    <!-- RIGHT: LINKS -->
+    <div class="nav-right">
+      <a href="/">Home</a>
+<a href="/about">About Autism</a>
+<a href="/screening">START SCREENING</a>
+    </div>
+
+  </div>
+</header>
+
+  <!-- HERO -->
+  <section class="wa-hero">
+    <div class="wa-hero-inner">
+      <p class="wa-label">AUTISM SPECTRUM DISORDER</p>
+      <h1>Understanding Autism</h1>
+      <p class="wa-hero-sub">A lifelong neurodevelopmental condition that influences how individuals communicate, interact, and experience the world.</p>
+    </div>
+  </section>
+
+  <!-- WHAT IS AUTISM -->
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>What Is Autism?</h2>
+      <p>Autism Spectrum Disorder (ASD) is a neurodevelopmental condition characterized by differences in social communication and patterns of behavior, interests, or sensory processing. It begins in early childhood and continues throughout life.</p>
+      <p>The term "spectrum" reflects the wide range of experiences among autistic individuals. Each person presents a unique combination of strengths, differences, and support needs.</p>
+      <p>According to current estimates from the U.S. Centers for Disease Control and Prevention (CDC), autism affects approximately 1 in 31 children and 1 in 45 adults in the United States.</p>
+    </div>
+  </section>
+
+  <!-- SPECTRUM OF PRESENTATION -->
+  <section class="wa-split">
+    <div class="wa-split-inner">
+      <div class="wa-left">
+        <h2>The Spectrum of Presentation</h2>
+        <p>Autism does not look the same in every individual. Some people are highly verbal, while others may communicate using alternative or augmentative methods.</p>
+        <p>Intellectual ability varies widely. Some autistic individuals require significant daily support, while others live independently and pursue advanced academic or professional paths.</p>
+        <p>Support needs are categorized in the DSM-5-TR into three levels based on functional support requirements.</p>
+      </div>
+      <div class="wa-right">
+        <div class="wa-box">
+          <h3>DSM-5-TR Support Levels</h3>
+          <ul>
+            <li><strong>Level 1:</strong> Requiring support</li>
+            <li><strong>Level 2:</strong> Requiring substantial support</li>
+            <li><strong>Level 3:</strong> Requiring very substantial support</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CO-OCCURRING CONDITIONS -->
+  <section class="wa-content light">
+    <div class="wa-container">
+      <h2>Co-Occurring Conditions</h2>
+      <p>Many autistic individuals experience additional medical, behavioral, or mental health conditions that may influence daily functioning and quality of life.</p>
+      <div class="wa-grid">
+        <div>Attention-Deficit / Hyperactivity Disorder (ADHD)</div>
+        <div>Anxiety disorders and depression</div>
+        <div>Gastrointestinal conditions</div>
+        <div>Seizure disorders</div>
+        <div>Sleep disturbances</div>
+        <div>Sensory processing differences</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIAGNOSIS -->
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>Diagnosis and Lifespan</h2>
+      <p>Signs of autism often emerge before age three. In the United States, the average age of formal diagnosis is approximately five years.</p>
+      <p>Autism is lifelong. However, an individual's strengths, challenges, and support needs may evolve across different life stages. Early identification and evidence-based interventions are associated with improved communication skills and long-term outcomes.</p>
+    </div>
+  </section>
+
+  <!-- GENDER DIFFERENCES -->
+  <section class="wa-content accent">
+    <div class="wa-container">
+      <h2>Gender Differences and Underdiagnosis</h2>
+      <p>Autism is diagnosed more frequently in boys than girls, yet research suggests that girls and women may present differently. They often demonstrate subtler social differences and may engage in masking behaviors that conceal symptoms.</p>
+      <p>Masking can delay diagnosis and contribute to mental health challenges, particularly during adolescence and adulthood.</p>
+    </div>
+  </section>
+
+  <!-- TOPIC NAV -->
+  <section class="topic-nav">
+    <div class="topic-nav-inner">
+      <h3>Explore Autism Topics</h3>
+      <div class="topic-links">
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/autism-screening-info">Autism Screening</a>
+        <a href="/causes">What Causes Autism?</a>
+        <a href="/vaccines">Vaccines & Autism</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+        <a href="/therapies">Resources and Support</a>
+        <a href="/awareness">Autism Awareness and Understanding</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-icon">♡</div><span style="color:white;">AutiScan</span></div>
+        <p>An AI-powered early autism screening platform helping families take confident next steps.</p>
+      </div>
+      <div class="footer-col"><h4>Screening</h4><a href="../screening.html">Start Screening</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="what-is-autism.html">What is Autism?</a><a href="signs-and-symptoms.html">Signs & Symptoms</a><a href="autism-diagnosis.html">Diagnosis</a></div>
+      <div class="footer-col"><h4>About</h4><a href="../about.html">About Autism</a><a href="../index.html">Home</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 AutiScan. For informational purposes only.</p></div>
+  </footer>
+
+  <script>
+    const links = document.querySelectorAll(".topic-links a");
+    const current = window.location.pathname;
+    links.forEach(link => {
+      if (current.includes(link.getAttribute("href"))) link.classList.add("active-topic");
+      else link.classList.remove("active-topic");
+    });
+  </script>
+</body>
+</html>

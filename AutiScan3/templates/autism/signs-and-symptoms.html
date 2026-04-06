@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signs & Symptoms | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <!--  FIXED CSS (IMPORTANT) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<body>
+  <header class="navbar">
+  <div class="nav-container">
+    
+    <!-- LEFT: LOGO -->
+    <div class="nav-left">
+      <div class="logo-circle">
+        <span>♡</span>
+      </div>
+      <span class="logo-text">AutiScan</span>
+    </div>
+
+    <!-- RIGHT: LINKS -->
+    <div class="nav-right">
+      <a href="/">Home</a>
+<a href="/about">About Autism</a>
+<a href="/screening">START SCREENING</a>
+    </div>
+
+  </div>
+</header>
+
+  <section class="wa-hero">
+    <div class="wa-hero-inner">
+      <p class="wa-label">EARLY RECOGNITION</p>
+      <h1>Signs & Symptoms of Autism</h1>
+      <p class="wa-hero-sub">Understanding early signs helps families seek timely support and intervention.</p>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>When Do Signs Appear?</h2>
+      <p>Signs of autism can often be detected before age 2–3. Some parents notice differences in their child's development as early as 12–18 months. In other cases, signs become more apparent once a child enters social settings like school.</p>
+      <p>Early recognition is important — but signs vary widely depending on the child's age, ability level, and individual profile.</p>
+    </div>
+  </section>
+
+  <section class="wa-content light">
+    <div class="wa-container">
+      <h2>Social Communication Signs</h2>
+      <div class="wa-grid">
+        <div>Limited or inconsistent eye contact</div>
+        <div>Doesn't respond to their name by 12 months</div>
+        <div>Difficulty sharing interests or enjoyment</div>
+        <div>Limited use of gestures (waving, pointing)</div>
+        <div>Prefers solitary play over group play</div>
+        <div>Difficulty understanding social rules</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>Communication & Language Signs</h2>
+      <div class="wa-grid">
+        <div>Delayed speech or language development</div>
+        <div>Repeating words or phrases (echolalia)</div>
+        <div>Difficulty starting or sustaining conversations</div>
+        <div>Unusual tone, rhythm, or pitch of speech</div>
+        <div>Difficulty understanding figurative language</div>
+        <div>May have extensive vocabulary but struggle socially</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content light">
+    <div class="wa-container">
+      <h2>Behavior & Sensory Signs</h2>
+      <div class="wa-grid">
+        <div>Repetitive movements (hand flapping, rocking, spinning)</div>
+        <div>Strong attachment to routines — upset by changes</div>
+        <div>Intense, focused interest in specific topics</div>
+        <div>Over or under-sensitivity to sensory input</div>
+        <div>Unusual reactions to sounds, textures, or lights</div>
+        <div>Difficulty with transitions between activities</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content accent">
+    <div class="wa-container">
+      <h2>Important Reminder</h2>
+      <p>Having one or even several of these signs does not mean a child has autism. Many traits appear in typical development. A formal diagnosis requires comprehensive evaluation by qualified professionals.</p>
+      <p>If you are concerned about your child's development, the best first step is to speak with your pediatrician or use a screening tool like AutiScan to help structure your observations.</p>
+    </div>
+  </section>
+
+  <section class="topic-nav">
+    <div class="topic-nav-inner">
+      <h3>Explore Autism Topics</h3>
+      <div class="topic-links">
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/autism-screening-info">Autism Screening</a>
+        <a href="/causes">What Causes Autism?</a>
+        <a href="/vaccines">Vaccines & Autism</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+        <a href="/therapies">Resources and Support</a>
+        <a href="/awareness">Autism Awareness and Understanding</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><div class="logo-icon">♡</div><span style="color:white;">AutiScan</span></div><p>An AI-powered early autism screening platform.</p></div>
+      <div class="footer-col"><h4>Screening</h4><a href="../screening.html">Start Screening</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="what-is-autism.html">What is Autism?</a><a href="autism-diagnosis.html">Diagnosis</a></div>
+      <div class="footer-col"><h4>About</h4><a href="../about.html">About Autism</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 AutiScan. For informational purposes only.</p></div>
+  </footer>
+  <script>
+    const links = document.querySelectorAll(".topic-links a");
+    const current = window.location.pathname;
+    links.forEach(link => {
+      if (current.includes(link.getAttribute("href"))) link.classList.add("active-topic");
+      else link.classList.remove("active-topic");
+    });
+  </script>
+</body>
+</html>

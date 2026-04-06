@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutiScan — Early Autism Awareness</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ FIXED CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </div>
+
+    <!-- ✅ FIXED LINKS -->
+    <nav>
+      <a href="/">Home</a>
+      <a href="/#how">How It Works</a>
+      <a href="/about">About Autism</a>
+      <a href="/screening" class="nav-btn">START SCREENING</a>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="home" class="hero">
+    <div class="badge">
+      <span>ⓘ</span>
+      <p>EARLY AWARENESS MAKES A DIFFERENCE</p>
+    </div>
+    <h1>Understanding Autism<br>Starts Here</h1>
+    <p class="subtext">
+      A supportive AI-powered platform to help you identify autism traits early through
+      guided screening.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="/screening" class="primary-btn">START SCREENING →</a>
+      <a href="/about" class="secondary-btn">LEARN ABOUT AUTISM</a>
+    </div>
+  </section>
+
+  <!-- IMAGE SECTION -->
+  <section class="image-section">
+    <div class="image-container">
+      <!-- ✅ FIXED IMAGE -->
+      <img src="{{ url_for('static', filename='images/homepage.jpeg') }}" alt="Autism">
+    </div>
+  </section>
+
+  <!-- REST OF YOUR UI (UNCHANGED) -->
+
+  <!-- WHY THIS MATTERS SECTION -->
+  <section class="why-section">
+    <h2>Why This Matters</h2>
+    <p class="why-subtext">
+      Early identification of autism traits can lead to timely support and interventions
+      that significantly improve quality of life. Our platform makes the screening
+      process accessible, parent-friendly, and judgment-free.
+    </p>
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="icon">👥</div>
+        <h3>Accessible</h3>
+        <p>Easy-to-use screening from the comfort of your home</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">♡</div>
+        <h3>Supportive</h3>
+        <p>Respectful, neurodiversity-affirming approach</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">🛡️</div>
+        <h3>Evidence-Based</h3>
+        <p>Built on established assessment frameworks</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECTRUM SECTION -->
+  <section id="spectrum" class="spectrum-section">
+    <h2>Autism Is a Spectrum</h2>
+    <p class="spectrum-subtext">
+      Autism is not a linear scale. It's a complex, multi-dimensional spectrum
+      of traits that vary from person to person across different areas.
+    </p>
+
+    <div class="profile-controls">
+      <button data-profile="child">Child Profile</button>
+      <button data-profile="teen">Teen Profile</button>
+      <button data-profile="adult">Adult Profile</button>
+    </div>
+
+    <div class="spectrum-grid">
+      <div class="spectrum-card purple" data-trait="social">
+        <h3>Social Interaction</h3>
+        <div class="progress-wrapper">
+          <span class="scale-label">Low</span>
+          <div class="progress">
+            <div class="progress-fill"></div>
+            <div class="marker"></div>
+          </div>
+          <span class="scale-label">High</span>
+        </div>
+        <p class="trait-description">Difficulty with eye contact, reciprocity, or group interaction.</p>
+      </div>
+      <div class="spectrum-card blue" data-trait="communication">
+        <h3>Communication</h3>
+        <div class="progress-wrapper">
+          <span class="scale-label">Low</span>
+          <div class="progress">
+            <div class="progress-fill"></div>
+            <div class="marker"></div>
+          </div>
+          <span class="scale-label">High</span>
+        </div>
+        <p class="trait-description">Differences in verbal/non-verbal communication patterns.</p>
+      </div>
+      <div class="spectrum-card brown" data-trait="sensory">
+        <h3>Sensory Sensitivity</h3>
+        <div class="progress-wrapper">
+          <span class="scale-label">Low</span>
+          <div class="progress">
+            <div class="progress-fill"></div>
+            <div class="marker"></div>
+          </div>
+          <span class="scale-label">High</span>
+        </div>
+        <p class="trait-description">Sensitivity to sound, light, textures, or environments.</p>
+      </div>
+      <div class="spectrum-card green" data-trait="repetitive">
+        <h3>Repetitive Behaviors</h3>
+        <div class="progress-wrapper">
+          <span class="scale-label">Low</span>
+          <div class="progress">
+            <div class="progress-fill"></div>
+            <div class="marker"></div>
+          </div>
+          <span class="scale-label">High</span>
+        </div>
+        <p class="trait-description">Repetitive movements, routines, or restricted interests.</p>
+      </div>
+      <div class="spectrum-card pink" data-trait="focus">
+        <h3>Focus & Attention</h3>
+        <div class="progress-wrapper">
+          <span class="scale-label">Low</span>
+          <div class="progress">
+            <div class="progress-fill"></div>
+            <div class="marker"></div>
+          </div>
+          <span class="scale-label">High</span>
+        </div>
+        <p class="trait-description">Variability in sustained attention or hyperfocus.</p>
+      </div>
+      <div class="spectrum-card gray" data-trait="emotional">
+        <h3>Emotional Regulation</h3>
+        <div class="progress-wrapper">
+          <span class="scale-label">Low</span>
+          <div class="progress">
+            <div class="progress-fill"></div>
+            <div class="marker"></div>
+          </div>
+          <span class="scale-label">High</span>
+        </div>
+        <p class="trait-description">Difficulty managing emotional responses.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW SECTION -->
+  <section id="how" class="how-section">
+    <h2>How the Screening Works</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="icon-circle">📋</div>
+        <h3>Choose Assessment</h3>
+        <p>Select parent/caregiver or self-assessment based on who you're evaluating.</p>
+      </div>
+      <div class="how-card">
+        <div class="icon-circle">💬</div>
+        <h3>Answer Questions</h3>
+        <p>Complete guided questions about behaviors and traits at your own pace.</p>
+      </div>
+      <div class="how-card">
+        <div class="icon-circle">🤖</div>
+        <h3>AI Analysis</h3>
+        <p>Our AI analyzes behavioral patterns to provide spectrum-based insights.</p>
+      </div>
+      <div class="how-card">
+        <div class="icon-circle">♡</div>
+        <h3>Get Support</h3>
+        <p>Access evidence-based resources and professional referrals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IS THIS FOR SECTION -->
+  <section class="who-section">
+    <h2>Who Is This For</h2>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-icon">👨‍👩‍👧</div>
+        <h3>Parent/Caregiver Assessment</h3>
+        <p class="age-text">For children ages 18 months – 12 years</p>
+        <p class="description">
+          Answer questions about your child's behavior,
+          communication, and social interactions.
+        </p>
+        <div class="who-footer">
+          <span class="time">⏱ 10–15 minutes</span>
+          <a href="/screening?type=parent" class="secondary-btn">START →</a>
+        </div>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🧑</div>
+        <h3>Self-Assessment</h3>
+        <p class="age-text">For adolescents and adults 13+</p>
+        <p class="description">
+          Explore your own traits and characteristics
+          in a supportive, judgment-free environment.
+        </p>
+        <div class="who-footer">
+          <span class="time">⏱ 15–20 minutes</span>
+          <a href="/screening?type=self" class="secondary-btn">START →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST SECTION -->
+  <section class="trust-section">
+    <h2>Trust, Ethics & Safety</h2>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">🛡</div>
+        <h3>Not a Diagnosis</h3>
+        <p>This screening tool provides informational insights only. Professional evaluation is necessary for diagnosis.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">🔒</div>
+        <h3>Your Privacy Matters</h3>
+        <p>Your data is encrypted and never shared without your explicit consent.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">✔</div>
+        <h3>Evidence-Based</h3>
+        <p>Our screening questions are based on established autism assessment frameworks and DSM-5.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">♡</div>
+        <h3>Supportive Approach</h3>
+        <p>We provide information in a respectful, neurodiversity-affirming manner.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT HAPPENS NEXT SECTION -->
+  <section class="next-section">
+    <h2>What Happens Next</h2>
+    <div class="next-grid">
+      <div class="next-card">
+        <div class="next-icon">🩺</div>
+        <h3>Find a Specialist</h3>
+        <p>Connect with qualified professionals who can provide comprehensive diagnostic evaluations.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-icon">👥</div>
+        <h3>Support Groups</h3>
+        <p>Join communities of parents and individuals sharing similar experiences.</p>
+      </div>
+      <a href="/about" class="next-card-link">
+        <div class="next-card">
+          <div class="next-icon">📘</div>
+          <h3>Learn About Autism</h3>
+          <p>Access evidence-based information about autism spectrum characteristics.</p>
+        </div>
+      </a>
+      <a href="/therapies" class="next-card-link">
+        <div class="next-card">
+        <div class="next-icon">✨</div>
+        <h3>Early Intervention</h3>
+        <p>Discover therapies and interventions that can support development.</p>
+      </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FINAL CTA SECTION -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>Take the First Step</h2>
+      <p class="cta-subtext">
+        You don't have to navigate this journey alone.
+        Start with a simple screening to better understand
+        autism traits and next steps.
+      </p>
+      <a href="/screening">
+        <button class="primary-cta">Start Screening Now <span class="arrow">→</span></button>
+      </a>
+      <p class="cta-note">Free • Confidential • Takes only 10–20 minutes</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">♡</div>
+          <span style="color:white;">AutiScan</span>
+        </div>
+        <p>An AI-powered early autism screening platform helping families recognize developmental patterns and take confident next steps.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Screening</h4>
+        <a href="/screening">Parent/Caregiver</a>
+        <a href="/screening">Self-Assessment</a>
+        <a href="#how">How It Works</a>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="/awareness">What is Autism?</a>
+        <a href="autism/signs-and-symptoms.html">Signs &amp; Symptoms</a>
+        <a href="autism/causes-of-autism.html">Causes</a>
+        <a href="autism/autism-diagnosis.html">Diagnosis</a>
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="/about">About Autism</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 AutiScan. This tool is for informational purposes only and does not constitute medical diagnosis.</p>
+    </div>
+  </footer>
+
+  <script>
+    const profiles = {
+      child:  { social: "70%", communication: "50%", sensory: "80%", repetitive: "60%", focus: "40%", emotional: "65%" },
+      teen:   { social: "50%", communication: "60%", sensory: "55%", repetitive: "45%", focus: "75%", emotional: "50%" },
+      adult:  { social: "40%", communication: "55%", sensory: "45%", repetitive: "35%", focus: "70%", emotional: "60%" }
+    };
+
+    function updateProfile(type) {
+      const data = profiles[type];
+      document.querySelectorAll(".spectrum-card").forEach(card => {
+        const trait = card.dataset.trait;
+        const value = data[trait];
+        card.querySelector(".progress-fill").style.width = value;
+        card.querySelector(".marker").style.left = value;
+      });
+    }
+
+    document.querySelectorAll(".profile-controls button").forEach(btn => {
+      btn.addEventListener("click", () => updateProfile(btn.dataset.profile));
+    });
+
+    updateProfile("child");
+
+    // Intersection observer for card animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add("show"), i * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll(".spectrum-card, .how-card, .who-card, .trust-card, .next-card").forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

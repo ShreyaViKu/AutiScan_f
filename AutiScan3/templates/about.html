@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Autism | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ FIXED CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </div>
+
+    <!-- ✅ FIXED LINKS -->
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About Autism</a>
+      <a href="/#how">How It Works</a>
+      <a href="/screening" class="nav-btn">START SCREENING</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="about-hero">
+    <div class="about-hero-content">
+      <div class="hero-badge">ℹ Understanding · Acceptance · Support</div>
+      <h1>Understanding Autism Spectrum Disorder</h1>
+      <p>Evidence-based information to help you understand autism.</p>
+    </div>
+  </section>
+
+  <!-- KNOWLEDGE HUB -->
+  <section class="about-knowledge">
+    <div class="knowledge-wrapper">
+
+      <div class="knowledge-nav">
+        <h3>Autism Topics</h3>
+
+        <!-- ✅ FIXED LINKS -->
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/autism-screening-info">Autism Screening</a>
+        <a href="/causes">What Causes Autism?</a>
+        <a href="/vaccines">Vaccines & Autism</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+        <a href="/therapies">Resources and Support</a>
+        <a href="/awareness">Autism Awareness and Understanding</a>
+      </div>
+
+      <div class="knowledge-content">
+        <div class="knowledge-text">
+          <h2>Explore Evidence-Based Information</h2>
+          <p>
+          Autism is complex and often misunderstood. This knowledge hub provides structured, research-informed explanations to help families, 
+          educators, and individuals understand the spectrum with clarity.</p>
+          <p>
+            Each section addresses a critical question — from early signs to screening tools and diagnostic processes — grounded in scientific evidence.
+          </p>
+        </div>
+
+        <!-- ✅ FIXED IMAGE -->
+        <div class="knowledge-image">
+          <img src="{{ url_for('static', filename='images/asd.jpeg') }}" alt="Autism">
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!--Awareness section-->
+  <section class="autism-bold">
+    <div class="bold-wrapper">
+      <h2>
+        Autism Is Not a Disorder to Fix.
+        <span>It's a Different Way of Being.</span>
+      </h2>
+      <div class="bold-intro">
+        <p class="lead">Autism Spectrum Disorder (ASD) is a neurodevelopmental difference that influences how individuals communicate, interact, and experience the world.</p>
+        <p>It is called a <strong>spectrum</strong> because no two individuals experience it the same way. Support needs, strengths, and challenges vary across communication, sensory processing, behavior, and focus.</p>
+        <p class="emphasis">Autism is not something to "fix." It is a different neurological framework — one that deserves understanding and support.</p>
+      </div>
+      <div class="bold-grid">
+        <div class="bold-card">
+          <h3>Autism Is a Spectrum</h3>
+          <p>No two individuals experience autism the same way. Strengths and challenges vary across communication, sensory sensitivity, focus, and behavior.</p>
+        </div>
+        <div class="bold-card">
+          <h3>Strengths Exist Alongside Challenges</h3>
+          <p>Many individuals show exceptional memory, deep focus, pattern recognition, and creativity.</p>
+        </div>
+        <div class="bold-card">
+          <h3>Early Understanding Changes Outcomes</h3>
+          <p>Awareness and support can significantly improve confidence, independence, and quality of life.</p>
+        </div>
+        <div class="bold-card">
+          <h3>Acceptance Is Powerful</h3>
+          <p>Autism is a lifelong neurological difference. With understanding and inclusion, individuals can thrive.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!--Understanding the spectrum-->
+  <section class="spectrum-section" style="padding: 100px 20px;">
+    <div class="spectrum-container">
+      <h2 class="spectrum-title">Understanding the Spectrum</h2>
+      <p class="spectrum-statement">Autism is not a linear scale from "mild" to "severe."</p>
+      <p class="spectrum-intro">Instead, it is multi-dimensional. Every individual has a unique combination of strengths and challenges across different areas of development and daily functioning.</p>
+      <div class="spectrum-grid">
+        <div class="spectrum-card social show">
+          <h3>Social Interaction</h3>
+          <p>How a person connects, shares, and builds relationships with others.</p>
+        </div>
+        <div class="spectrum-card communication show">
+          <h3>Communication</h3>
+          <p>Verbal and non-verbal expression, tone, understanding, and language patterns.</p>
+        </div>
+        <div class="spectrum-card sensory show">
+          <h3>Sensory Processing</h3>
+          <p>How sounds, light, textures, movement, and environments are experienced.</p>
+        </div>
+        <div class="spectrum-card repetitive show">
+          <h3>Repetitive Behaviors</h3>
+          <p>Routines, patterns, rituals, and restricted or special interests.</p>
+        </div>
+        <div class="spectrum-card emotional show">
+          <h3>Emotional Regulation</h3>
+          <p>Recognizing, understanding, and managing internal emotional states.</p>
+        </div>
+        <div class="spectrum-card cognitive show">
+          <h3>Cognitive Styles</h3>
+          <p>Differences in attention, memory, pattern recognition, and processing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!--Myths vs facts-->
+  <section class="myths-section">
+    <div class="myths-container">
+      <h2>Common Myths vs. Facts</h2>
+      <p class="myths-subtitle">Misconceptions about autism can prevent families from seeking early support. Here's the truth.</p>
+      <div class="myths-grid">
+        <div class="myth-card">
+          <div class="myth-side myth">
+            <h3>❌ Myth</h3>
+            <p>Vaccines cause autism.</p>
+          </div>
+          <div class="myth-side fact">
+            <h3>✅ Fact</h3>
+            <p>Multiple large-scale scientific studies have found no link between vaccines and autism. This claim was based on a fraudulent, retracted study.</p>
+          </div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-side myth">
+            <h3>❌ Myth</h3>
+            <p>Autism only affects children.</p>
+          </div>
+          <div class="myth-side fact">
+            <h3>✅ Fact</h3>
+            <p>Autism is a lifelong condition. Many adults are diagnosed later in life, and support needs can evolve but never disappear.</p>
+          </div>
+        </div>
+        <div class="myth-card">
+          <div class="myth-side myth">
+            <h3>❌ Myth</h3>
+            <p>Autistic people don't want friendships.</p>
+          </div>
+          <div class="myth-side fact">
+            <h3>✅ Fact</h3>
+            <p>Many autistic individuals deeply desire connection but may find social interaction more challenging or exhausting than neurotypical peers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <h2>A Small Step Today Can Make a Big Difference Tomorrow.</h2>
+
+      <!-- ✅ FIXED BUTTON -->
+      <a href="/screening">
+        <button class="primary-cta">Start Screening Now →</button>
+      </a>
+
+      <p class="cta-note">Free • Confidential • Not a diagnosis</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">♡</div>
+          <span style="color:white;">AutiScan</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Screening</h4>
+        <a href="/screening">Parent/Caregiver</a>
+        <a href="/screening">Self-Assessment</a>
+        <a href="/#how">How It Works</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/causes">Causes</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>About</h4>
+        <a href="/">Home</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 AutiScan</p>
+    </div>
+  </footer>
+
+</body>
+</html>

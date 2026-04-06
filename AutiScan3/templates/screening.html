@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Screening Tool | AutiScan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="screening-page">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </div>
+    <nav>
+     <a href="/">Home</a>
+     <a href="/#how">How It Works</a>
+     <a href="/about">About Autism</a>
+    </nav>
+  </header>
+
+  <!-- SCREENING HERO -->
+  <section class="screening-hero">
+    <h1>Autism Screening Tool</h1>
+    <p>Answer guided questions at your own pace. This is not a diagnosis — it's a first step toward understanding.</p>
+  </section>
+
+  <!-- ASSESSMENT SELECTOR -->
+  <div id="selector" class="assessment-selector">
+    <h2>Select Your Assessment</h2>
+    <p>Choose the type of screening that best applies to your situation</p>
+    <div class="assessment-cards">
+      <div class="assessment-card" onclick="startQuiz()">
+        <div class="ac-icon">👨‍👩‍👧</div>
+        <h3>Parent / Caregiver Assessment</h3>
+        <p class="ac-age">For children ages 18 months – 12 years</p>
+        <p>Answer questions about your child's behavior, communication, and social interactions.</p>
+        <div class="ac-meta">
+          <span class="ac-time">⏱ 10–15 minutes</span>
+          <button class="ac-start-btn">Begin →</button>
+        </div>
+      </div>
+      <div class="assessment-card" onclick="startQuiz('self')">
+        <div class="ac-icon">🧑</div>
+        <h3>Self-Assessment</h3>
+        <p class="ac-age">For adolescents and adults 13+</p>
+        <p>Explore your own traits and characteristics in a supportive, judgment-free environment.</p>
+        <div class="ac-meta">
+          <span class="ac-time">⏱ 15–20 minutes</span>
+          <button class="ac-start-btn">Begin →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <!-- ONLY SHOWING IMPORTANT FIXED PART -->
+
+<form method="POST" action="/predict">
+
+  <!-- QUIZ SECTION -->
+  <div id="quizSection" class="quiz-wrapper">
+    <div class="quiz-header">
+      <h2 id="quizTitle">Assessment</h2>
+      <p id="quizSubtitle">Answer each question honestly — there are no right or wrong answers.</p>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="quiz-nav">
+      <button type="button" class="quiz-back-btn" onclick="prevQuestion()" style="visibility:hidden">← Back</button>
+      <button type="button" class="quiz-next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ✨ ENHANCED DETAILS SECTION -->
+<div id="detailsSection" class="quiz-wrapper" style="display:none;">
+
+  <div class="quiz-header">
+    <h2>Almost Done 🎯</h2>
+    <p>Just a few quick details to make your results more accurate and meaningful.</p>
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" style="width:100%;"></div>
+    </div>
+  </div>
+
+  <div class="question-card-features">
+
+    <!-- AGE -->
+    <div class="input-group">
+      <h3>Child's Age</h3>
+      <p class="input-hint">This helps us interpret developmental patterns appropriately.</p>
+
+      <div class="age-slider-wrap">
+        <input type="range" min="1" max="18" value="5" id="ageSlider" name="age">
+          <div class="age-display">
+            <span id="ageOutput">5</span> years
+          </div>
+      </div>
+    </div>
+    <br>
+
+    <!-- GENDER -->
+    <div class="input-group">
+      <h3>👦🏻👧🏻 Gender</h3>
+      <p class="input-hint">Autism traits can present differently across genders.</p>
+
+      <div class="answer-options">
+        <div class="answer-option" onclick="selectOption('gender','m',this)">♂️ Male</div>
+        <div class="answer-option" onclick="selectOption('gender','f',this)">♀️ Female</div>
+        <br>
+      </div>
+
+      <input type="hidden" name="gender" id="gender">
+    </div>
+
+    <!-- JAUNDICE -->
+    <div class="input-group">
+      <h3>🦠 Jaundice at Birth</h3>
+      <p class="input-hint">Some studies explore early biological factors — this helps refine insights.</p>
+
+      <div class="answer-options">
+        <div class="answer-option" onclick="selectOption('jundice','yes',this)">🟢 Yes</div>
+        <div class="answer-option" onclick="selectOption('jundice','no',this)">🔴 No</div>
+      </div>
+
+      <input type="hidden" name="jundice" id="jundice">
+    </div>
+    <br>
+
+    <!-- FAMILY HISTORY -->
+    <div class="input-group">
+      <h3>👨🏻‍👩🏻‍👧🏻‍👦🏻 Family History of Autism</h3>
+      <p class="input-hint">Autism can have a genetic component.</p>
+
+      <div class="answer-options">
+        <div class="answer-option" onclick="selectOption('austim','yes',this)">🟢 Yes</div>
+        <div class="answer-option" onclick="selectOption('austim','no',this)">🔴 No</div>
+      </div>
+
+      <input type="hidden" name="austim" id="austim">
+    </div>
+
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="quiz-nav">
+    <button type="button" class="quiz-back-btn" onclick="goBackToQuiz()">← Back</button>
+    <button type="submit" class="quiz-next-btn" onclick="return validateDetails()">Get Results →</button>
+  </div>
+
+</div>
+
+</form>
+
+
+
+  <!-- RESULTS SECTION -->
+  <div id="resultsSection" class="results-wrapper">
+    <div class="results-header">
+      <h2>Your Screening Results</h2>
+      <p>Review the insights below. Remember, this is a screening tool — not a diagnosis.</p>
+    </div>
+
+    <div class="result-disclaimer">
+      ⚠️ This tool provides informational insights only. The results below are based on your responses and are not a clinical diagnosis. Please consult a qualified healthcare professional for a comprehensive evaluation.
+    </div>
+
+    <div class="result-score-card">
+      <div class="result-score-label">OVERALL INDICATOR SCORE</div>
+      <div class="result-score-number" id="scoreNumber">0</div>
+      <div class="result-score-text" id="scoreText">Calculating...</div>
+      <div class="result-score-sub" id="scoreSub">Based on your responses across all screening questions.</div>
+    </div>
+
+    <div class="results-trait-breakdown">
+      <h3>Trait Area Breakdown</h3>
+      <div id="traitBars"></div>
+    </div>
+
+    <div class="results-next-steps">
+      <h3>Recommended Next Steps</h3>
+      <div class="next-step-item">
+        <div class="next-step-icon">🩺</div>
+        <div class="next-step-text">
+          <h4>Consult a Healthcare Professional</h4>
+          <p>Share these results with your pediatrician or a developmental specialist for a comprehensive evaluation.</p>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="next-step-icon">📘</div>
+        <div class="next-step-text">
+          <h4>Learn More About Autism</h4>
+          <p>Explore evidence-based information to better understand autism spectrum characteristics and what they mean.</p>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="next-step-icon">👥</div>
+        <div class="next-step-text">
+          <h4>Connect with Support Communities</h4>
+          <p>Join communities of families and individuals who share similar experiences. You are not alone.</p>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="next-step-icon">✨</div>
+        <div class="next-step-text">
+          <h4>Early Intervention Resources</h4>
+          <p>If screening suggests potential indicators, early intervention services can significantly improve developmental outcomes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-actions">
+      <button class="retake-btn" onclick="retake()">← Retake Assessment</button>
+      <!--<button class="primary-btn" onclick="downloadPDF()">Download PDF Report ⬇️</button>-->
+      <a href="/about"><button class="primary-btn">Learn About Autism →</button></a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="margin-top:80px;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">♡</div>
+          <span style="color:white;">AutiScan</span>
+        </div>
+        <p>An AI-powered early autism screening platform helping families recognize developmental patterns and take confident next steps.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Screening</h4>
+        <a href="/screening">Parent/Caregiver</a>
+        <a href="/screening">Self-Assessment</a>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="/autism/what-is-autism">What is Autism?</a>
+        <a href="/autism/signs-and-symptoms">Signs & Symptoms</a>
+        <a href="/autism/autism-diagnosis">Diagnosis</a>  
+      </div>
+      <div class="footer-col">
+        <h4>About</h4>
+       <a href="/about">About Autism</a>
+       <a href="/">Home</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 AutiScan. This tool is for informational purposes only and does not constitute medical diagnosis.</p>
+    </div>
+  </footer>
+
+  <script>
+
+// ===== QUESTIONS (10 ONLY) =====
+const parentQuestions = [
+  { 
+    question: "Eye Contact", 
+    text: "Does the child avoid looking at people while talking or listening?", 
+    explain: "Example: looks away, looks at the floor, or doesn’t look at your face during conversation." 
+  },
+
+  { 
+    question: "Playing with Others", 
+    text: "Does the child often prefer to play alone instead of playing with other children?", 
+    explain: "Example: chooses solo activities even when other kids are around and inviting them." 
+  },
+
+  { 
+    question: "Understanding Feelings", 
+    text: "Does the child find it hard to understand how others are feeling?", 
+    explain: "Example: doesn’t notice when someone is sad, upset, or happy." 
+  },
+
+  { 
+    question: "Routine Change", 
+    text: "Does the child get very upset when their daily routine changes?", 
+    explain: "Example: getting angry or anxious if meal time, school time, or usual plans change." 
+  },
+
+  { 
+    question: "Repetitive Behavior", 
+    text: "Does the child repeat the same words, phrases, or actions again and again?", 
+    explain: "Example: repeating lines from TV, saying the same thing multiple times, or doing the same movement repeatedly." 
+  },
+
+  { 
+    question: "Starting Conversations", 
+    text: "Does the child find it difficult to start or continue a conversation with others?", 
+    explain: "Example: doesn’t initiate talking, waits for others to speak first, or stays silent in social situations." 
+  },
+
+  { 
+    question: "Sharing Happiness", 
+    text: "How often does the child share things they enjoy with others?", 
+    explain: "Example: Does the child show toys, drawings, or exciting things to parents or friends?" 
+  },
+
+  { 
+    question: "Sensitivity", 
+    text: "Is the child very sensitive to certain sounds, textures, or touch?", 
+    explain: "Example: covers ears for normal sounds, dislikes certain clothes, or avoids being touched." 
+  },
+
+  { 
+    question: "Imaginative Play", 
+    text: "Does the child find it difficult to play pretend or use imagination?", 
+    explain: "Example: doesn’t play 'house', 'teacher', or pretend games with toys." 
+  },
+
+  { 
+    question: "Social Situations", 
+    text: "Does the child often feel uncomfortable or overwhelmed in social situations?", 
+    explain: "Example: avoids crowds, gets anxious in gatherings, or wants to leave quickly." 
+  }
+];
+
+let currentIndex = 0;
+let answers = {};
+
+// ===== START QUIZ =====
+function startQuiz() {
+  document.getElementById('selector').style.display = 'none';
+  document.getElementById('quizSection').classList.add('active');
+
+  // ✅ IMPORTANT RESET
+  document.getElementById("detailsSection").style.display = "none";
+
+  buildQuestions();
+  showQuestion(0);
+}
+
+// ===== BUILD QUESTIONS =====
+function buildQuestions() {
+  const container = document.getElementById('questionsContainer');
+  container.innerHTML = '';
+
+  parentQuestions.forEach((q, i) => {
+    container.innerHTML += `
+      <div class="question-block" id="q-${i}">
+        <div class="question-card">
+          <div class="q-number">Question ${i+1} of 10</div>
+          <h3>${q.question}</h3>
+          <p>${q.text}</p>
+
+          <button type="button" class="cool-btn" onclick="toggleExplain(${i})">💡 Explain </button>
+          <div id="explain-${i}" style="display:none;">${q.explain}</div>
+
+          <div class="answer-options">
+            ${option(i,0,"Never")}
+            ${option(i,1,"Rarely")}
+            ${option(i,2,"Sometimes")}
+            ${option(i,3,"Often")}
+          </div>
+
+          <input type="hidden" name="q${i}" id="input-q${i}">
+        </div>
+      </div>
+    `;
+  });
+}
+
+// ===== OPTIONS =====
+function option(i, score, label) {
+  return `
+    <div class="answer-option" onclick="selectAnswer(${i},${score})">
+      ${label}
+    </div>
+  `;
+}
+
+// ===== SELECT ANSWER =====
+function selectAnswer(i, score) {
+
+  let options = document.querySelectorAll(`#q-${i} .answer-option`);
+  options.forEach(opt => opt.classList.remove("selected"));
+
+  let selected = options[score];
+  selected.classList.add("selected");
+
+  // SIMPLE LOGIC
+  let val = (score >= 2) ? 1 : 0;
+
+  document.getElementById(`input-q${i}`).value = val;
+  answers[i] = val;
+
+  document.getElementById('nextBtn').disabled = false;
+}
+
+// ===== SHOW QUESTION =====
+function showQuestion(i) {
+  document.querySelectorAll('.question-block').forEach(q => q.style.display='none');
+  document.getElementById(`q-${i}`).style.display = 'block';
+}
+
+// ===== NEXT =====
+function nextQuestion() {
+
+  if (answers[currentIndex] === undefined) {
+    alert("Please select an answer before continuing.");
+    return;
+  }
+
+  if(currentIndex < 9){
+    currentIndex++;
+    showQuestion(currentIndex);
+  } else {
+    // 🔥 instead of submitting → show details page
+    document.getElementById("quizSection").style.display = "none";
+    document.getElementById("detailsSection").style.display = "block";
+  }
+}
+
+// ===== BACK =====
+function prevQuestion(){
+  if(currentIndex > 0){
+    currentIndex--;
+    showQuestion(currentIndex);
+  }
+}
+
+//=====Go back to quiz====
+function goBackToQuiz() {
+  document.getElementById("detailsSection").style.display = "none";
+  document.getElementById("quizSection").style.display = "block";
+}
+
+// ===== EXPLAIN =====
+function toggleExplain(i){
+  let e = document.getElementById(`explain-${i}`);
+  e.style.display = (e.style.display==="none") ? "block" : "none";
+}
+
+// ===== SELECT OPTION (GENDER / JAUNDICE / FAMILY HISTORY) =====
+function selectOption(field, value, element) {
+  // 1. Remove 'selected' class from all options in the same group
+  let options = element.parentElement.querySelectorAll('.answer-option');
+  options.forEach(opt => opt.classList.remove('selected'));
+  // 2. Add 'selected' class to clicked option
+  element.classList.add('selected');
+  // 3. Set hidden input value
+  document.getElementById(field).value = value;
+}
+
+// ===== AGE SLIDER =====
+const ageSlider = document.getElementById("ageSlider");
+const ageOutput = document.getElementById("ageOutput");
+// Set initial value
+ageOutput.innerText = ageSlider.value;
+// Update on slider move
+ageSlider.addEventListener("input", function() {
+  ageOutput.innerText = this.value;
+});
+
+function updateAge(val) {
+  document.getElementById("ageValue").innerText = val;
+}
+
+function validateDetails() {
+  const gender = document.getElementById("gender").value;
+  const jundice = document.getElementById("jundice").value;
+  const austim = document.getElementById("austim").value;
+
+  if (!gender || !jundice || !austim) {
+    alert("Please fill all details before proceeding.");
+    return false;
+  }
+
+  // If all fields are filled → submit form
+  document.querySelector("form").submit();
+}
+
+function downloadPDF() {
+  document.querySelector("form").action = "/download-pdf";
+  document.querySelector("form").submit();
+}
+
+</script>
+
+</body>
+</html>

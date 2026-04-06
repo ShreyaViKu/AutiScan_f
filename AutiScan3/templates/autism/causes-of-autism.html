@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What Causes Autism? | AutiScan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FIXED CSS (IMPORTANT) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="navbar">
+  <div class="nav-container">
+    
+    <!-- LEFT: LOGO -->
+    <div class="nav-left">
+      <div class="logo-circle">
+        <span>♡</span>
+      </div>
+      <span class="logo-text">AutiScan</span>
+    </div>
+
+    <!-- RIGHT: LINKS -->
+    <div class="nav-right">
+      <a href="/">Home</a>
+<a href="/about">About Autism</a>
+<a href="/screening">START SCREENING</a>
+    </div>
+
+  </div>
+</header>
+
+  <section class="wa-hero">
+    <div class="wa-hero-inner">
+      <p class="wa-label">UNDERSTANDING ASD</p>
+      <h1>What Causes Autism?</h1>
+      <p class="wa-hero-sub">Current research points to a combination of genetic and environmental factors — not a single cause.</p>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>A Complex, Multi-Factor Origin</h2>
+      <p>Researchers do not believe autism has a single cause. Instead, current evidence suggests autism results from a combination of genetic predisposition and certain environmental influences during early development.</p>
+      <p>Autism is not caused by parenting style, vaccines, or anything a parent did during pregnancy. These myths have been thoroughly debunked by large-scale scientific research.</p>
+    </div>
+  </section>
+
+  <section class="wa-content light">
+    <div class="wa-container">
+      <h2>Genetic Factors</h2>
+      <p>Genetics play a significant role in autism. Studies show that autism runs in families, and identical twins are much more likely to both have autism than fraternal twins.</p>
+      <p>Researchers have identified hundreds of genes associated with autism risk. Some rare gene mutations strongly influence development, while many common genetic variants may combine to create susceptibility.</p>
+      <div class="wa-grid">
+        <div>Higher risk if a sibling has autism</div>
+        <div>Identical twin concordance ~70–90%</div>
+        <div>Hundreds of associated gene variants</div>
+        <div>New (de novo) mutations also identified</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wa-content">
+    <div class="wa-container">
+      <h2>Environmental Influences</h2>
+      <p>While genetics play a major role, certain environmental factors during pregnancy and early development may increase risk in genetically susceptible individuals. These include:</p>
+      <div class="wa-grid">
+        <div>Advanced parental age at time of conception</div>
+        <div>Prenatal exposure to certain medications</div>
+        <div>Complications during birth (oxygen deprivation)</div>
+        <div>Premature birth or low birth weight</div>
+      </div>
+      <p style="margin-top:24px;">These are risk factors — not causes. Most children with these factors do not develop autism.</p>
+    </div>
+  </section>
+
+  <section class="wa-content accent">
+    <div class="wa-container">
+      <h2>What Does NOT Cause Autism</h2>
+      <p>Scientific consensus is clear that the following do <strong>not</strong> cause autism:</p>
+      <div class="wa-grid">
+        <div>❌ Childhood vaccines (MMR or others)</div>
+        <div>❌ Bad parenting or lack of emotional warmth</div>
+        <div>❌ Screen time or diet in early childhood</div>
+        <div>❌ Trauma or emotional stress alone</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="topic-nav">
+    <div class="topic-nav-inner">
+      <h3>Explore Autism Topics</h3>
+      <div class="topic-links">
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/autism-screening-info">Autism Screening</a>
+        <a href="/causes">What Causes Autism?</a>
+        <a href="/vaccines">Vaccines & Autism</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+        <a href="/therapies">Resources and Support</a>
+        <a href="/awareness">Autism Awareness and Understanding</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo"><div class="logo-icon">♡</div><span style="color:white;">AutiScan</span></div><p>An AI-powered early autism screening platform.</p></div>
+      <div class="footer-col"><h4>Screening</h4><a href="../screening.html">Start Screening</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="what-is-autism.html">What is Autism?</a><a href="signs-and-symptoms.html">Signs & Symptoms</a></div>
+      <div class="footer-col"><h4>About</h4><a href="../about.html">About Autism</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 AutiScan. For informational purposes only.</p></div>
+  </footer>
+  <script>
+    const links = document.querySelectorAll(".topic-links a");
+    const current = window.location.pathname;
+    links.forEach(link => {
+      if (current.includes(link.getAttribute("href"))) link.classList.add("active-topic");
+      else link.classList.remove("active-topic");
+    });
+  </script>
+</body>
+</html>
