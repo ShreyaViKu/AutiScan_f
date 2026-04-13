@@ -29,10 +29,6 @@ def screening():
 def awareness():
     return render_template("awareness.html")
 
-@app.route("/games")
-def games_hub():
-    return render_template("games.html")
-
 # -------- AUTISM SUBPAGES --------
 @app.route("/what-is-autism")
 def what_is_autism():
@@ -61,30 +57,6 @@ def vaccines():
 @app.route("/therapies")
 def therapies():
     return render_template("therapies.html")
-
-@app.route('/game/eye')
-def game_eye():
-    return render_template('games/eye.html')
-
-@app.route('/game/speech')
-def game_speech():
-    return render_template('games/speech.html')
-
-@app.route('/game/emotion')
-def game_emotion():
-    return render_template('games/emotion.html')
-
-@app.route('/game/social')
-def game_social():
-    return render_template('games/social.html')
-
-@app.route('/game/flex')
-def game_flex():
-    return render_template('games/flex.html')
-
-@app.route('/game/memory')
-def game_memory():
-    return render_template('games/memory.html')
 
 # -------- ML PREDICTION --------
 @app.route("/predict", methods=["POST"])
@@ -159,15 +131,6 @@ def predict():
 
     confidence = round(abs(final_prob - 0.5) * 200, 2)
 
-    games = [
-        {
-            "name": "Emotion Recognition", 
-            "link": "/game/emotion",
-            "desc": "A fun game to help identify different feelings like happy, sad, or angry.",
-            "reason": "Autistic children often struggle with facial expressions. This game teaches recognizing feelings and social cues."
-        }
-    ]
-
     return render_template(
         "result.html",
         percent=percent,
@@ -176,8 +139,7 @@ def predict():
         age=age,
         gender=gender,
         jundice=jundice,
-        austim=austim,
-        games=games   # ✅ ADD THIS
+        austim=austim
     )
     
 # -------- PDF DOWNLOAD ROUTE (NEW) --------
@@ -190,45 +152,10 @@ def download_pdf():
     spectrum = request.form.get("spectrum")
     confidence = request.form.get("confidence")
     age = request.form.get("age")
-    gender = int(request.form.get("gender"))
-    jundice = int(request.form.get("jundice"))
-    austim = int(request.form.get("austim"))
+    gender = request.form.get("gender")
+    jundice = request.form.get("jundice")
+    austim = request.form.get("austim")
     name = request.form.get("name", "Unknown")  # 🔹 default if somehow missing
-    
-
-    # 🔹 Convert percent to float for logic
-    percent_val = float(percent)
-
-    # 🔹 Summary
-    if percent_val < 20:
-        summary = "The screening indicates a very low likelihood of autism traits."
-    elif percent_val < 40:
-        summary = "The screening indicates a low likelihood of autism traits."
-    elif percent_val < 60:
-        summary = "The screening indicates a moderate likelihood of autism traits."
-    elif percent_val < 80:
-        summary = "The screening indicates a high likelihood of autism traits."
-    else:
-        summary = "The screening indicates a very high likelihood of autism traits."
-
-    # 🔹 Recommendation
-    if percent_val >= 60:
-        recommendation = "It is recommended to consult a pediatrician or child psychologist for further evaluation."
-    elif percent_val >= 40:
-        recommendation = "Consider monitoring the child's development and consult a specialist if concerns persist."
-    else:
-        recommendation = "No immediate concerns based on screening, but continue observing developmental milestones."
-
-    print("Age:", age)
-    print("Gender:", gender)
-    print("Jaundice:", jundice)
-    print("Family History:", austim)
-    print("RAW:", gender, jundice, austim)
-    print("TYPE:", type(gender))
-
-    # display date
-    from datetime import datetime
-    today = datetime.now().strftime("%d %B %Y")
 
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer)
@@ -237,50 +164,24 @@ def download_pdf():
 
     content.append(Paragraph("AutiScan Screening Report", styles['Title']))
     content.append(Spacer(1, 20))
-    content.append(Paragraph(f"Report Generated On: {today}", styles['Normal']))
-    content.append(Spacer(1, 10))
 
-    '''
     content.append(Paragraph(f"Name: {name}", styles['Normal']))  
     content.append(Paragraph(f"Age: {age}", styles['Normal']))
     content.append(Paragraph(f"Gender: {'Male' if gender == 1 else 'Female'}", styles['Normal']))
     content.append(Paragraph(f"Jaundice: {'Yes' if jundice == 1 else 'No'}", styles['Normal']))
     content.append(Paragraph(f"Family History of Autism: {'Yes' if austim == 1 else 'No'}", styles['Normal']))
-'''
-    content.append(Paragraph("Details", styles['Heading2']))
-    content.append(Spacer(1, 5))
-
-    content.append(Paragraph(f"Name: {name}", styles['Normal']))  
-    content.append(Paragraph(f"Age: {age}", styles['Normal']))
-    content.append(Paragraph(f"Gender: {'Male' if gender == 1 else 'Female'}", styles['Normal']))
-    content.append(Paragraph(f"Jaundice at Birth: {'Yes' if jundice == 1 else 'No'}", styles['Normal']))
-    content.append(Paragraph(f"Family History: {'Yes' if austim == 1 else 'No'}", styles['Normal']))
+        
 
     content.append(Spacer(1, 20))
-    content.append(Paragraph("Screening Result", styles['Heading2']))
-    content.append(Spacer(1, 5))
-    content.append(Paragraph(f"Score: {percent}%", styles['Normal']))
-    content.append(Paragraph(f"Risk Level: {spectrum}", styles['Normal']))
+    content.append(Paragraph(f"Score: {percent}%", styles['Heading2']))
+    content.append(Paragraph(f"Risk Level: {spectrum}", styles['Heading2']))
     content.append(Paragraph(f"Confidence: {confidence}%", styles['Normal']))
-    content.append(Spacer(1, 20))
-    content.append(Paragraph("Summary", styles['Heading2']))
-    content.append(Spacer(1, 5))
-    content.append(Paragraph(summary, styles['Normal']))
 
     content.append(Spacer(1, 20))
-    content.append(Paragraph("Recommendations", styles['Heading2']))
-    content.append(Spacer(1, 5))
-    content.append(Paragraph(recommendation, styles['Normal']))
-    content.append(Spacer(1, 20))
-    content.append(Paragraph("Disclaimer", styles['Heading2']))
-    content.append(Spacer(1, 5))
-
     content.append(Paragraph(
-    "This screening tool is not a medical diagnosis. It is intended for awareness purposes only. "
-    "Please consult a qualified healthcare professional for a complete evaluation.",
-    styles['Normal']
-))
-
+        "⚠️ This is not a medical diagnosis. Please consult a healthcare professional.",
+        styles['Normal']
+    ))
 
     doc.build(content)
     buffer.seek(0)
@@ -300,5 +201,16 @@ if __name__ == "__main__":
     
     app.run(debug=True)
 
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-    
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/screening")
+def screening():
+    return render_template("screening.html")

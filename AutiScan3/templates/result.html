@@ -25,7 +25,6 @@
   <nav>
     <a href="/">Home</a>
     <a href="/about">About Autism</a>
-    <a href="/games">Games</a>
     <a href="/screening">Screening</a>
   </nav>
 </header>
@@ -63,51 +62,6 @@ Spectrum Level:
 <p class="mt-3">
 <b>Confidence:</b> {{ confidence }}%
 </p>
-
-<hr class="my-4">
-
-<h3 class="mb-3 text-success">
-  🎮 Personalized Game Recommendations
-</h3>
-
-<p class="text-muted">
-Based on your child’s responses, we suggest the following activities to support development:
-</p>
-
-{% if games %}
-  <div class="row">
-
-    {% for game in games %}
-    <div class="col-md-6 mb-4">
-      <div class="card shadow-sm p-3 h-100 rounded-4">
-
-        <h5 class="fw-bold text-primary">
-          🎯 {{ game.name }}
-        </h5>
-
-        <p class="mb-2">
-          {{ game.desc }}
-        </p>
-
-        <p class="text-muted small">
-          <b>Why this game?</b><br>
-          {{ game.reason }}
-        </p>
-
-        <a href="{{ game.link }}">
-          <button class="btn btn-success mt-2 w-100 rounded-pill">
-            ▶ Play Game
-          </button>
-        </a>
-
-      </div>
-    </div>
-    {% endfor %}
-
-  </div>
-{% else %}
-  <p class="text-muted">No specific recommendations. Try general cognitive games.</p>
-{% endif %}
 
 <form id="pdfForm" action="/download-pdf" method="POST">
   <!-- Hidden inputs for all details -->

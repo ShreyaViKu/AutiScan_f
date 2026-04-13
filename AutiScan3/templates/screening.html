@@ -126,11 +126,11 @@
       <p class="input-hint">Some studies explore early biological factors — this helps refine insights.</p>
 
       <div class="answer-options">
-        <div class="answer-option" onclick="selectOption('jundice','yes',this)">🟢 Yes</div>
-        <div class="answer-option" onclick="selectOption('jundice','no',this)">🔴 No</div>
+        <div class="answer-option" onclick="selectOption('jaundice','yes',this)">🟢 Yes</div>
+        <div class="answer-option" onclick="selectOption('jaundice','no',this)">🔴 No</div>
       </div>
 
-      <input type="hidden" name="jundice" id="jundice">
+      <input type="hidden" name="jaundice" id="jaundice">
     </div>
     <br>
 
@@ -140,11 +140,11 @@
       <p class="input-hint">Autism can have a genetic component.</p>
 
       <div class="answer-options">
-        <div class="answer-option" onclick="selectOption('austim','yes',this)">🟢 Yes</div>
-        <div class="answer-option" onclick="selectOption('austim','no',this)">🔴 No</div>
+        <div class="answer-option" onclick="selectOption('autism','yes',this)">🟢 Yes</div>
+        <div class="answer-option" onclick="selectOption('autism','no',this)">🔴 No</div>
       </div>
 
-      <input type="hidden" name="austim" id="austim">
+      <input type="hidden" name="autism" id="autism">
     </div>
 
   </div>
@@ -437,13 +437,10 @@ function toggleExplain(i){
 }
 
 // ===== SELECT OPTION (GENDER / JAUNDICE / FAMILY HISTORY) =====
-function selectOption(field, value, element) {
-  // 1. Remove 'selected' class from all options in the same group
-  let options = element.parentElement.querySelectorAll('.answer-option');
-  options.forEach(opt => opt.classList.remove('selected'));
-  // 2. Add 'selected' class to clicked option
-  element.classList.add('selected');
-  // 3. Set hidden input value
+function selectOption(field, value, btn) {
+  let group = btn.parentElement;
+  group.querySelectorAll("button").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
   document.getElementById(field).value = value;
 }
 
@@ -463,10 +460,10 @@ function updateAge(val) {
 
 function validateDetails() {
   const gender = document.getElementById("gender").value;
-  const jundice = document.getElementById("jundice").value;
-  const austim = document.getElementById("austim").value;
+  const jaundice = document.getElementById("jaundice").value;
+  const autism = document.getElementById("autism").value;
 
-  if (!gender || !jundice || !austim) {
+  if (!gender || !jaundice || !autism) {
     alert("Please fill all details before proceeding.");
     return false;
   }
