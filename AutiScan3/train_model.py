@@ -20,11 +20,30 @@ os.makedirs("model", exist_ok=True)
 # -----------------------------
 data = pd.read_csv("autism_child_data.csv")
 
+
+
 # -----------------------------
-# 3. Preprocessing
+# 🔥 3. Encoding categorical features (PASTE HERE)
+# -----------------------------
+# CLEAN values first
+data['gender'] = data['gender'].str.lower().str.strip()
+data['jundice'] = data['jundice'].str.lower().str.strip()
+data['austim'] = data['austim'].str.lower().str.strip()
+
+# MAP properly
+data['gender'] = data['gender'].map({'m':1, 'male':1, 'f':0, 'female':0})
+data['jundice'] = data['jundice'].map({'yes':1, 'no':0})
+data['austim'] = data['austim'].map({'yes':1, 'no':0})
+
+data = data.dropna()
+print(data.isnull().sum())
+
+# -----------------------------
+# 4. Preprocessing (UPDATED)
 # -----------------------------
 X = data[['A1_Score','A2_Score','A3_Score','A4_Score','A5_Score',
-          'A6_Score','A7_Score','A8_Score','A9_Score','A10_Score']]
+          'A6_Score','A7_Score','A8_Score','A9_Score','A10_Score',
+          'age','gender','jundice','austim']]
 
 y = data['Class/ASD'].map({'YES':1,'NO':0})
 

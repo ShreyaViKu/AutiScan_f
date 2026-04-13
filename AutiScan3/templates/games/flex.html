@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexibility Game — AutiScan</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+  <style>
+    :root {
+      --game-bg: radial-gradient(circle at top left, #f4ece6, #e9e3dc);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --primary: #111;
+      --primary-hover: #333;
+      --success: #22c55e;
+      --error: #ef4444;
+      --text: #222;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--game-bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: rgba(233, 230, 230, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      background: #111;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    
+    .back-btn:hover {
+      opacity: 0.6;
+    }
+
+    .game-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .question-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .end-early-btn {
+      background: none;
+      border: 1px solid #ddd;
+      color: #666;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .end-early-btn:hover {
+      background: #fef2f2;
+      color: var(--error);
+      border-color: #fca5a5;
+    }
+
+    /* RULE BANNER */
+    .rule-banner {
+      background: #f8fafc;
+      border: 3px solid var(--primary);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .rule-banner.changed {
+      animation: alert-pulse 1s ease-in-out;
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+
+    @keyframes alert-pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 rgba(34, 197, 94, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); }
+      100% { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    }
+
+    .rule-text {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .rule-text span {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 8px;
+      color: white;
+    }
+
+    /* GAME GRID */
+    .flex-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 500px) {
+      .flex-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .item-card {
+      aspect-ratio: 1;
+      background: white;
+      border: 2px solid #eee;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+      border-color: #ddd;
+    }
+
+    .item-card:active {
+      transform: translateY(1px);
+    }
+
+    .item-card.wrong {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+      border-color: var(--error);
+      background: #fef2f2;
+    }
+
+    .item-card.correct {
+      animation: popOut 0.4s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(3px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+
+    @keyframes popOut {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    /* CSS SHAPES */
+    .shape {
+      width: 60px;
+      height: 60px;
+      transition: all 0.3s ease;
+    }
+    
+    .shape-circle {
+      border-radius: 50%;
+    }
+    
+    .shape-square {
+      border-radius: 12px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .stat-box {
+      background: white;
+      padding: 0.5rem 1.25rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #eee;
+      font-size: 1.1rem;
+    }
+
+    .level-badge {
+      background: linear-gradient(135deg, #b08c63, #8e6c8a);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .feedback-area {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feedback-message {
+      font-size: 1.2rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: all 0.3s ease;
+    }
+    .feedback-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* OVERLAY ANNOUNCEMENT */
+    .rule-change-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(5px);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      border-radius: 30px;
+    }
+    .rule-change-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .rule-change-text {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .rule-change-sub {
+      font-size: 1.5rem;
+      color: #555;
+      margin-top: 1rem;
+      font-weight: 500;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 16px;
+      padding: 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    }
+    .option-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: var(--primary);
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      z-index: 1000;
+      pointer-events: none;
+      border-radius: 3px;
+    }
+    
+    #endScreen h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </a>
+    <nav>
+      <a href="/games" class="back-btn">← Back to Games</a>
+    </nav>
+  </header>
+
+  <!-- GAME AREA -->
+  <div class="game-container">
+    <div class="game-card">
+      
+      <!-- IN-GAME UI -->
+      <div id="gamePlayArea">
+        <div class="top-bar">
+          <button class="end-early-btn" onclick="forceEndGame()">⏹️ End Early</button>
+        </div>
+
+        <div class="level-badge" id="levelBadge">Level 1</div>
+        <h1 class="question-title">Adapting Game</h1>
+        <p class="subtitle">Follow the rule! If it changes, adapt quickly! 🧠</p>
+
+        <div class="stats">
+            <div class="stat-box">Score: <span id="scoreCounter" style="color: var(--success); font-weight: 800;">0</span></div>
+            <div class="stat-box">Goal: <span id="goalCounter">15</span></div>
+        </div>
+
+        <div class="rule-banner" id="ruleBanner">
+          <div style="font-size: 1.1rem; color: #666; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Current Rule</div>
+          <h2 class="rule-text" id="ruleTextContainer">Tap ANY item with color: <span id="ruleTargetLabel" style="background:#ef4444;">Red</span></h2>
+        </div>
+
+        <div class="flex-grid" id="flexGrid">
+          <!-- Items generated by JS -->
+        </div>
+
+        <div class="feedback-area">
+          <div class="feedback-message" id="feedbackMessage">Tap the matching shape!</div>
+        </div>
+
+        <!-- OVERLAY -->
+        <div class="rule-change-overlay" id="ruleOverlay">
+          <div class="rule-change-text">RULE CHANGED! 🔄</div>
+          <div class="rule-change-sub" id="ruleOverlaySub">Now look for Blue!</div>
+        </div>
+      </div>
+
+      <!-- END SCREEN UI -->
+      <div id="endScreen" style="display: none;">
+        <h2>Incredible Job! 🎉</h2>
+        <p style="font-size: 1.3rem; margin-bottom: 2rem;">You adapted so well to all the changes!</p>
+        
+        <div style="display: flex; justify-content: center; gap: 15px;">
+            <button class="option-btn" onclick="initGame()" style="flex:1;">🔄 Play Again</button>
+            <a href="/games" style="text-decoration:none; flex:1;">
+                <button class="option-btn" style="background:#111; color:white; border-color:#111; width:100%;">🎮 Games Hub</button>
+            </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Game Configuration
+    const colors = [
+      { name: 'Red', hex: '#ef4444' },
+      { name: 'Blue', hex: '#3b82f6' },
+      { name: 'Green', hex: '#22c55e' },
+      { name: 'Yellow', hex: '#eab308' }
+    ];
+    const shapes = [
+      { name: 'Circle', class: 'shape-circle' },
+      { name: 'Square', class: 'shape-square' }
+    ];
+
+    let currentRule = null; // e.g. { type: 'color', value: 'Red', hex: '#ef4444' }
+    let score = 0;
+    let goal = 15;
+    let itemsInRowSinceChange = 0;
+    let difficultyLevel = 1; // 1: only colors, 2: includes shapes
+    let gameGridItems = [];
+    const gridSize = 12;
+
+    const gridSizeEl = document.getElementById('flexGrid');
+    const scoreCounter = document.getElementById('scoreCounter');
+    const ruleTargetLabel = document.getElementById('ruleTargetLabel');
+    const ruleBanner = document.getElementById('ruleBanner');
+    const ruleOverlay = document.getElementById('ruleOverlay');
+    const ruleOverlaySub = document.getElementById('ruleOverlaySub');
+    const feedbackMessage = document.getElementById('feedbackMessage');
+    const levelBadge = document.getElementById('levelBadge');
+
+    function getRandom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function initGame() {
+      score = 0;
+      difficultyLevel = 1;
+      itemsInRowSinceChange = 0;
+      scoreCounter.textContent = score;
+      levelBadge.textContent = `Level 1: Colors`;
+      
+      document.getElementById('gamePlayArea').style.display = 'block';
+      document.getElementById('endScreen').style.display = 'none';
+      
+      setNewRule(false);
+      populateGrid();
+      showFeedback('Pay attention to the rule!', '#555');
+    }
+
+    function setNewRule(showOverlay = true) {
+      let previousRuleVal = currentRule ? currentRule.value : null;
+      
+      let candidateColor = getRandom(colors);
+      while(candidateColor.name === previousRuleVal) { candidateColor = getRandom(colors); } // ensure it actually changes
+
+      if (difficultyLevel === 1) {
+        currentRule = { type: 'color', value: candidateColor.name, hex: candidateColor.hex };
+      } else {
+        // In Level 2, rule can be color or shape
+        if (Math.random() > 0.5) {
+          currentRule = { type: 'color', value: candidateColor.name, hex: candidateColor.hex };
+        } else {
+          let candidateShape = getRandom(shapes);
+          while(candidateShape.name === previousRuleVal) { candidateShape = getRandom(shapes); }
+          currentRule = { type: 'shape', value: candidateShape.name, class: candidateShape.class };
+        }
+      }
+
+      itemsInRowSinceChange = 0;
+      updateRuleUI();
+
+      if (showOverlay) {
+        ruleOverlaySub.textContent = `Now match by ${currentRule.type.toUpperCase()}: ${currentRule.value}!`;
+        ruleOverlay.classList.add('active');
+        ruleBanner.classList.add('changed');
+        
+        setTimeout(() => {
+          ruleOverlay.classList.remove('active');
+          ruleBanner.classList.remove('changed');
+          ensureGridHasTargets(); // ensure there's at least one match for the new rule
+        }, 1500);
+      }
+    }
+
+    function updateRuleUI() {
+      const ruleTextContainer = document.getElementById('ruleTextContainer');
+      const actionText = currentRule.type === 'color' ? 'color' : 'shape';
+      const bg = currentRule.type === 'color' ? currentRule.hex : '#555';
+      
+      ruleTextContainer.innerHTML = `Tap ANY item with ${actionText}: <span style="background:${bg}; padding: 4px 12px; border-radius: 8px; color: white;">${currentRule.value}</span>`;
+    }
+
+    function forceEndGame() {
+      if (score === 0) {
+        window.location.href = '/games';
+        return;
+      }
+      showEndScreen();
+    }
+
+    function generateRandomItem() {
+      return {
+        color: getRandom(colors),
+        shape: getRandom(shapes)
+      };
+    }
+
+    function populateGrid() {
+      gridSizeEl.innerHTML = '';
+      gameGridItems = [];
+
+      for (let i = 0; i < gridSize; i++) {
+        createGridCell(i);
+      }
+      ensureGridHasTargets();
+    }
+
+    function createGridCell(index) {
+      let itemVal = generateRandomItem();
+      gameGridItems[index] = itemVal;
+
+      const cell = document.createElement('div');
+      cell.className = 'item-card';
+      cell.id = `cell-${index}`;
+
+      const shapeDiv = document.createElement('div');
+      shapeDiv.className = `shape ${itemVal.shape.class}`;
+      shapeDiv.style.backgroundColor = itemVal.color.hex;
+      
+      cell.appendChild(shapeDiv);
+      cell.onclick = () => handleCellClick(index, cell, itemVal);
+
+      gridSizeEl.appendChild(cell);
+    }
+
+    function updateGridCell(index) {
+      let itemVal = generateRandomItem();
+      gameGridItems[index] = itemVal;
+
+      const cell = document.getElementById(`cell-${index}`);
+      cell.className = 'item-card'; // reset classes
+      
+      const shapeDiv = cell.querySelector('.shape');
+      shapeDiv.className = `shape ${itemVal.shape.class}`;
+      shapeDiv.style.backgroundColor = itemVal.color.hex;
+    }
+
+    function ensureGridHasTargets() {
+      let hasTarget = gameGridItems.some(item => isTarget(item));
+      if (!hasTarget) {
+        // forcefully make one a target
+        let randIndex = Math.floor(Math.random() * gridSize);
+        let item = gameGridItems[randIndex];
+        
+        if (currentRule.type === 'color') {
+          item.color = colors.find(c => c.name === currentRule.value);
+        } else {
+          item.shape = shapes.find(s => s.name === currentRule.value);
+        }
+        
+        const cell = document.getElementById(`cell-${randIndex}`);
+        const shapeDiv = cell.querySelector('.shape');
+        shapeDiv.className = `shape ${item.shape.class}`;
+        shapeDiv.style.backgroundColor = item.color.hex;
+      }
+    }
+
+    function isTarget(item) {
+      if (currentRule.type === 'color') {
+        return item.color.name === currentRule.value;
+      } else {
+        return item.shape.name === currentRule.value;
+      }
+    }
+
+    function handleCellClick(index, cellElement, itemData) {
+      if (ruleOverlay.classList.contains('active')) return; // paused during alert
+
+      if (isTarget(itemData)) {
+        // Correct
+        cellElement.classList.add('correct');
+        score++;
+        scoreCounter.textContent = score;
+        itemsInRowSinceChange++;
+        showFeedback("Great job! 🌟", "var(--success)");
+        
+        setTimeout(() => {
+          updateGridCell(index);
+          ensureGridHasTargets();
+          checkProgress();
+        }, 400);
+
+      } else {
+        // Wrong
+        cellElement.classList.remove('wrong');
+        void cellElement.offsetWidth; // trigger reflow to restart animation
+        cellElement.classList.add('wrong');
+        showFeedback(`Oops! We need ${currentRule.value} matching the ${currentRule.type}! 👆`, "var(--error)");
+      }
+    }
+
+    function checkProgress() {
+      // Check win condition
+      if (score >= goal) {
+        setTimeout(showEndScreen, 500);
+        return;
+      }
+
+      // Progress to level 2 halfway
+      if (score === 8 && difficultyLevel === 1) {
+        difficultyLevel = 2;
+        levelBadge.textContent = `Level 2: Colors & Shapes`;
+        setNewRule(true);
+        return;
+      }
+
+      // Change rule randomly after successfully picking a few targets
+      if (itemsInRowSinceChange >= 3 && Math.random() > 0.4) {
+        setNewRule(true);
+      }
+    }
+
+    function showFeedback(text, color) {
+      feedbackMessage.textContent = text;
+      feedbackMessage.style.color = color;
+      feedbackMessage.classList.add('show');
+    }
+
+    function showEndScreen() {
+      document.getElementById('gamePlayArea').style.display = 'none';
+      document.getElementById('endScreen').style.display = 'block';
+      
+      createConfetti();
+      setTimeout(createConfetti, 500);
+      setTimeout(createConfetti, 1000);
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        
+        const colors = ['#f44336', '#e91e63', '#9c27b0', '#2196f3', '#00bcd4', '#4CAF50', '#8BC34A', '#FFEB3B', '#FF9800'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        confetti.style.left = '50%';
+        confetti.style.top = '40%';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 80 + Math.random() * 150;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+        
+        confetti.style.transform = `translate(-50%, -50%)`;
+        confetti.animate([
+          { transform: `translate(-50%, -50%) scale(1) rotate(0deg)`, opacity: 1 },
+          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], {
+          duration: 1000 + Math.random() * 1500,
+          easing: 'cubic-bezier(.37,0,.63,1)',
+          fill: 'forwards'
+        });
+        
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    // Start
+    initGame();
+  </script>
+</body>
+</html>

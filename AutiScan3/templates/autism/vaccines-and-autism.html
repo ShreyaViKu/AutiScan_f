@@ -5,18 +5,30 @@
   <title>Vaccines & Autism | AutiScan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
+  <!--  FIXED CSS (IMPORTANT) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header class="navbar">
-    <div class="nav-container">
-      <div class="nav-left"><div class="logo-circle"><span>♡</span></div><span class="logo-text">AutiScan</span></div>
-      <div class="nav-right">
-        <a href="../index.html">Home</a><a href="../about.html">About Autism</a>
-        <a href="../screening.html" class="cta-btn">START SCREENING</a>
+  <div class="nav-container">
+    
+    <!-- LEFT: LOGO -->
+    <div class="nav-left">
+      <div class="logo-circle">
+        <span>♡</span>
       </div>
+      <span class="logo-text">AutiScan</span>
     </div>
-  </header>
+
+    <!-- RIGHT: LINKS -->
+    <div class="nav-right">
+      <a href="/">Home</a>
+<a href="/about">About Autism</a>
+<a href="/screening">START SCREENING</a>
+    </div>
+
+  </div>
+</header>
 
   <section class="wa-hero">
     <div class="wa-hero-inner">
@@ -66,12 +78,14 @@
     <div class="topic-nav-inner">
       <h3>Explore Autism Topics</h3>
       <div class="topic-links">
-        <a href="what-is-autism.html">What is Autism?</a>
-        <a href="autism-screening.html">Autism Screening</a>
-        <a href="causes-of-autism.html">What Causes Autism?</a>
-        <a href="vaccines-and-autism.html">Do Vaccines Cause Autism?</a>
-        <a href="signs-and-symptoms.html">Signs & Symptoms</a>
-        <a href="autism-diagnosis.html">Autism Diagnosis</a>
+        <a href="/what-is-autism">What is Autism?</a>
+        <a href="/autism-screening-info">Autism Screening</a>
+        <a href="/causes">What Causes Autism?</a>
+        <a href="/vaccines">Vaccines & Autism</a>
+        <a href="/symptoms">Signs & Symptoms</a>
+        <a href="/autism-diagnosis">Diagnosis</a>
+        <a href="/therapies">Resources and Support</a>
+        <a href="/awareness">Autism Awareness and Understanding</a>
       </div>
     </div>
   </section>

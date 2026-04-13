@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eye Contact & Focus Game — AutiScan</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+  <style>
+    :root {
+      --game-bg: radial-gradient(circle at top left, #f4ece6, #e9e3dc);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --primary: #111;
+      --primary-hover: #333;
+      --success: #22c55e;
+      --error: #ef4444;
+      --text: #222;
+      --accent: #a855f7;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--game-bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .navbar {
+      background: rgba(233, 230, 230, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      background: #111;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    
+    .back-btn:hover {
+      opacity: 0.6;
+    }
+
+    /* GAME LAYOUT */
+    .game-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 2rem;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .top-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.6);
+      padding: 10px 20px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+      border: 1px solid rgba(255,255,255,0.8);
+      z-index: 10;
+    }
+
+    .stat-item {
+      font-weight: 600;
+      color: #555;
+      font-size: 1.1rem;
+    }
+
+    .stat-value {
+      color: var(--accent);
+      font-size: 1.2rem;
+      margin-left: 5px;
+    }
+
+    .end-early-btn {
+      background: none;
+      border: 1px solid #ddd;
+      color: #666;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .end-early-btn:hover {
+      background: #fef2f2;
+      color: var(--error);
+      border-color: #fca5a5;
+    }
+
+    .play-area {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+      border: 2px dashed rgba(168, 85, 247, 0.3);
+    }
+
+    /* THE FRIENDLY DOT */
+    .target-dot {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle at 30% 30%, #ffd700, #ff8c00);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255, 140, 0, 0.6), inset -5px -5px 15px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      animation: pulse 1.5s infinite alternate;
+      user-select: none;
+      display: none; /* hidden until start */
+    }
+
+    .target-dot:active {
+      transform: scale(0.8) !important;
+    }
+
+    .target-dot.level-2 { background: radial-gradient(circle at 30% 30%, #4facfe, #00f2fe); box-shadow: 0 0 20px rgba(0, 242, 254, 0.6); }
+    .target-dot.level-3 { background: radial-gradient(circle at 30% 30%, #43e97b, #38f9d7); box-shadow: 0 0 20px rgba(56, 249, 215, 0.6); }
+    .target-dot.level-4 { background: radial-gradient(circle at 30% 30%, #fa709a, #fee140); box-shadow: 0 0 20px rgba(250, 112, 154, 0.6); }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+
+    /* SPLASH / END SCREEN */
+    .overlay-screen {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      text-align: center;
+      padding: 2rem;
+      border-radius: 20px;
+    }
+
+    .overlay-screen h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .overlay-screen p {
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .action-btn {
+      padding: 14px 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .action-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--text);
+      border: 2px solid #ddd;
+    }
+    .secondary-btn:hover {
+      background: #f4f4f4;
+    }
+
+    /* CONFETTI */
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      z-index: 1000;
+      pointer-events: none;
+      border-radius: 3px;
+    }
+
+    /* POPUP SCORE TEXT */
+    .floating-score {
+      position: absolute;
+      font-weight: bold;
+      color: var(--success);
+      font-size: 1.5rem;
+      pointer-events: none;
+      animation: floatUp 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </a>
+    <nav>
+      <a href="/games" class="back-btn">← Back to Games</a>
+    </nav>
+  </header>
+
+  <!-- GAME AREA -->
+  <div class="game-wrapper">
+    
+    <div class="top-stats" id="topStats" style="display: none;">
+      <button class="end-early-btn" onclick="forceEndGame()">⏹️ End Early</button>
+      <div class="stat-item">Level <span class="stat-value" id="levelDisplay">1</span></div>
+      <div class="stat-item">Hits <span class="stat-value" id="scoreDisplay">0</span></div>
+    </div>
+
+    <div class="play-area" id="playArea">
+      
+      <!-- START SCREEN -->
+      <div class="overlay-screen" id="startScreen">
+        <h2>Follow the Star! ⭐</h2>
+        <p>This game helps build eye coordination and focus. A friendly star will jump around the screen. Follow it with your eyes, and try to catch (click) it before it moves!</p>
+        <button class="action-btn" onclick="startGame()">▶ Start Catching</button>
+      </div>
+
+      <!-- END SCREEN -->
+      <div class="overlay-screen" id="endScreen" style="display: none;">
+        <h2>Great Focus! 🎯</h2>
+        <p id="endMessage">You tracked the star perfectly!</p>
+        <div style="font-size: 1.2rem; margin-bottom: 2rem; background: #fdf2f8; padding: 15px 30px; border-radius: 15px; color: #831843; font-weight:600;">
+          Final Score: <span id="finalScore" style="font-size:1.8rem; color: #db2777;">0</span>
+        </div>
+        
+        <div style="display: flex; gap: 15px;">
+          <button class="action-btn" onclick="startGame()">🔄 Play Again</button>
+          <a href="/games" class="action-btn secondary-btn">🎮 Games Hub</a>
+        </div>
+      </div>
+
+      <!-- THE DOT -->
+      <div class="target-dot" id="targetDot" onclick="dotClicked(event)">⭐</div>
+
+    </div>
+  </div>
+
+  <script>
+    const targetDot = document.getElementById('targetDot');
+    const playArea = document.getElementById('playArea');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const levelDisplay = document.getElementById('levelDisplay');
+    
+    const startScreen = document.getElementById('startScreen');
+    const endScreen = document.getElementById('endScreen');
+    const topStats = document.getElementById('topStats');
+
+    // Adaptive Game Variables
+    let score = 0;
+    let appearances = 0;
+    let moveIntervalTime = 2500; // Starts very slow and forgiving: 2.5 seconds
+    let moveTimer = null;
+    let appearanceTime = 0;
+    let lastActionWasClick = false;
+    
+    // Safety caps
+    const maxAppearances = 25; // Adjusted down so the game doesn't drag on endlessly
+    const winScoreThreshold = 15; // If they get 15 points, they also win the game based on catches!
+    const thresholdWinSpeed = 500; // If they get fast enough to reach 500ms intervals, they win!
+
+    const characters = ['⭐', '🦋', '🐟', '🚀'];
+
+    function startGame() {
+      score = 0;
+      appearances = 0;
+      moveIntervalTime = 2500; 
+      lastActionWasClick = false;
+      
+      scoreDisplay.textContent = score;
+      updateDotAppearance();
+      
+      startScreen.style.display = 'none';
+      endScreen.style.display = 'none';
+      topStats.style.display = 'flex';
+      targetDot.style.display = 'flex';
+      
+      moveDot();
+    }
+
+    function forceEndGame() {
+      endGame();
+    }
+
+    function dotClicked(e) {
+      if (lastActionWasClick) return; 
+      lastActionWasClick = true;
+      
+      score++;
+      scoreDisplay.textContent = score;
+      
+      // Calculate Adaptive Adjustments
+      const reactionTime = Date.now() - appearanceTime;
+      
+      // Children's mouse reaction time is much higher, so we make this generous
+      if (reactionTime < 1200) {
+        moveIntervalTime -= 400; // Very fast response
+      } else if (reactionTime < 2000) {
+        moveIntervalTime -= 200; // Average response
+      } else {
+        moveIntervalTime -= 50; // Slow response
+      }
+      
+      // Floor it at 400ms to avoid breaking physics
+      moveIntervalTime = Math.max(400, moveIntervalTime);
+      updateDotAppearance();
+
+      // Sparkles and confetti
+      createFloatingText(e.clientX, e.clientY, "+1");
+      if(score % 3 === 0) createConfetti();
+      
+      // Immediately move to next spot after clearing interval
+      moveDot();
+    }
+
+    function moveDot() {
+      // If this fires and lastActionWasClick is STILL false, they MISSED it!
+      if (appearances > 0 && !lastActionWasClick) {
+        // Punish by slowing the game down considerably so they can re-focus
+        moveIntervalTime = Math.min(3500, moveIntervalTime + 300);
+        updateDotAppearance();
+      }
+
+      if(moveTimer) clearInterval(moveTimer);
+      
+      // Check for Game Over based on speed, score, or caps
+      if (moveIntervalTime <= thresholdWinSpeed || score >= winScoreThreshold || appearances >= maxAppearances) {
+        endGame();
+        return;
+      }
+
+      appearances++;
+      lastActionWasClick = false;
+      appearanceTime = Date.now();
+
+      // Calculate bounds safely
+      const areaRect = playArea.getBoundingClientRect();
+      const dotSize = 70; 
+      const maxX = areaRect.width - dotSize - 20; 
+      const maxY = areaRect.height - dotSize - 20;
+      
+      const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+
+      targetDot.style.left = `${randomX}px`;
+      targetDot.style.top = `${randomY}px`;
+
+      // Wait exactly the adaptive amount of time before making it "miss" and jump away
+      moveTimer = setInterval(moveDot, moveIntervalTime);
+    }
+
+    function updateDotAppearance() {
+      // We calculate their "Level" dynamically based on the current interval speed
+      let computedLevel = 1;
+      if(moveIntervalTime <= 800) computedLevel = 4;
+      else if(moveIntervalTime <= 1300) computedLevel = 3;
+      else if(moveIntervalTime <= 1900) computedLevel = 2;
+
+      levelDisplay.textContent = computedLevel;
+      targetDot.textContent = characters[computedLevel - 1] || '⭐';
+      
+      targetDot.className = 'target-dot';
+      if(computedLevel > 1) {
+        targetDot.classList.add(`level-${computedLevel}`);
+      }
+    }
+
+    function endGame() {
+      if(moveTimer) clearInterval(moveTimer);
+      targetDot.style.display = 'none';
+      topStats.style.display = 'none';
+      
+      endScreen.style.display = 'flex';
+      document.getElementById('finalScore').textContent = `${score} / ${appearances}`;
+      
+      const msg = document.getElementById('endMessage');
+      
+      // Win Conditions calculated by speed reached
+      if(moveIntervalTime <= thresholdWinSpeed) {
+        msg.textContent = "Incredible! You reached MAX SPEED! Your focus is unmatched! ⚡";
+        setTimeout(createConfetti, 100);
+        setTimeout(createConfetti, 600);
+      } else if (score >= 10) {
+        msg.textContent = "Great tracking! You caught a lot of them! 👏";
+      } else {
+        msg.textContent = "Good try! Your focus is getting better every time! 🌟";
+      }
+    }
+
+    function createFloatingText(x, y, text) {
+      const el = document.createElement('div');
+      el.className = 'floating-score';
+      el.textContent = text;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 30; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        const colors = ['#f44336', '#e91e63', '#9c27b0', '#2196f3', '#00bcd4', '#4CAF50', '#FFEB3B', '#FF9800'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        confetti.style.left = '50%';
+        confetti.style.top = '20%';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 50 + Math.random() * 100;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+        
+        confetti.style.transform = `translate(-50%, -50%)`;
+        confetti.animate([
+          { transform: `translate(-50%, -50%) scale(1) rotate(0deg)`, opacity: 1 },
+          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], {
+          duration: 800 + Math.random() * 500,
+          easing: 'cubic-bezier(.37,0,.63,1)',
+          fill: 'forwards'
+        });
+        
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 1500);
+      }
+    }
+  </script>
+</body>
+</html>

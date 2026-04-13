@@ -25,6 +25,7 @@
   <nav>
     <a href="/">Home</a>
     <a href="/about">About Autism</a>
+    <a href="/games">Games</a>
     <a href="/screening">Screening</a>
   </nav>
 </header>
@@ -63,6 +64,67 @@ Spectrum Level:
 <b>Confidence:</b> {{ confidence }}%
 </p>
 
+<hr class="my-4">
+
+<h3 class="mb-3 text-success">
+  🎮 Personalized Game Recommendations
+</h3>
+
+<p class="text-muted">
+Based on your child’s responses, we suggest the following activities to support development:
+</p>
+
+{% if games %}
+  <div class="row">
+
+    {% for game in games %}
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3 h-100 rounded-4">
+
+        <h5 class="fw-bold text-primary">
+          🎯 {{ game.name }}
+        </h5>
+
+        <p class="mb-2">
+          {{ game.desc }}
+        </p>
+
+        <p class="text-muted small">
+          <b>Why this game?</b><br>
+          {{ game.reason }}
+        </p>
+
+        <a href="{{ game.link }}">
+          <button class="btn btn-success mt-2 w-100 rounded-pill">
+            ▶ Play Game
+          </button>
+        </a>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+{% else %}
+  <p class="text-muted">No specific recommendations. Try general cognitive games.</p>
+{% endif %}
+
+<form id="pdfForm" action="/download-pdf" method="POST">
+  <!-- Hidden inputs for all details -->
+  <input type="hidden" name="percent" value="{{ percent }}">
+  <input type="hidden" name="spectrum" value="{{ spectrum }}">
+  <input type="hidden" name="confidence" value="{{ confidence }}">
+  <input type="hidden" name="age" value="{{ age }}">
+  <input type="hidden" name="gender" value="{{ gender }}">
+  <input type="hidden" name="jundice" value="{{ jundice }}">
+  <input type="hidden" name="austim" value="{{ austim }}">
+  <input type="hidden" name="name" id="userName" value="">
+
+  <button type="button" class="btn btn-primary mt-3" id="downloadPdfBtn"onclick="askNameAndSubmit()">
+    <i class="bi bi-download"></i> Download PDF Report
+  </button>
+</form>
+
 <p class="text-muted mt-4">
 This is an AI-based screening tool and not a medical diagnosis.
 </p>
@@ -73,6 +135,35 @@ This is an AI-based screening tool and not a medical diagnosis.
 
 </div>
 </div>
+
+<script>
+function askNameAndSubmit() {
+    let name = prompt("Please enter your name:");
+    if(name && name.trim() !== "") {
+        // Set the hidden input value
+        document.getElementById("userName").value = name.trim();
+        // Submit the form
+        document.getElementById("pdfForm").submit();
+    } else {
+        alert("Name is required to download the report.");
+    }
+}
+
+function submitPDF() {
+    // Ask for user name
+    let userName = prompt("Please enter your name:");
+    if (!userName || userName.trim() === "") {
+        alert("Name is required to download the PDF report!");
+        return; // stop submission if name is empty
+    }
+
+    // Set the name in the hidden input
+    document.getElementById("nameInput").value = userName.trim();
+
+    // Submit the form
+    document.getElementById("pdfForm").submit();
+}
+</script>
 
 </body>
 </html>

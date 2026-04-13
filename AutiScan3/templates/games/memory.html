@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Game — AutiScan</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+  <style>
+    :root {
+      --game-bg: radial-gradient(circle at top left, #f4ece6, #e9e3dc);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --primary: #111;
+      --primary-hover: #333;
+      --success: #22c55e;
+      --error: #ef4444;
+      --text: #222;
+      --matched: #dcfce7;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--game-bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: rgba(233, 230, 230, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      background: #111;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+    
+    .back-btn:hover {
+      opacity: 0.6;
+    }
+
+    .game-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      max-width: 650px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .question-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    /* MATCING GRID STYLING */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 2rem;
+      perspective: 1000px;
+    }
+    
+    @media (max-width: 500px) {
+        .memory-grid {
+            gap: 10px;
+        }
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
+      background-color: transparent;
+      cursor: pointer;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 16px;
+    }
+
+    .memory-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .memory-card.matched {
+      transform: rotateY(180deg);
+      cursor: default;
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .card-front {
+      background: linear-gradient(135deg, #b08c63, #8e6c8a);
+      color: white;
+      font-size: 2.5rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .card-front::after {
+        content: '?';
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .card-back {
+      background-color: white;
+      transform: rotateY(180deg);
+      font-size: 3rem;
+      border: 2px solid #ddd;
+    }
+
+    .memory-card.matched .card-back {
+        background-color: var(--matched);
+        border-color: var(--success);
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+        animation: pulse-match 0.5s ease-in-out;
+    }
+    
+    @keyframes pulse-match {
+        0% { transform: rotateY(180deg) scale(1); }
+        50% { transform: rotateY(180deg) scale(1.05); }
+        100% { transform: rotateY(180deg) scale(1); }
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      color: #555;
+    }
+    
+    .stat-box {
+        background: white;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+    }
+
+    .feedback-area {
+      min-height: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .feedback-message {
+      font-size: 1.25rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: all 0.3s ease;
+    }
+
+    .feedback-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .option-btn {
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 16px;
+      padding: 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+      font-family: inherit;
+    }
+
+    .option-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: var(--primary);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      z-index: 1000;
+      pointer-events: none;
+      border-radius: 3px;
+    }
+
+    /* END SCREEN */
+    #endScreen h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    #endScreen p {
+      font-size: 1.3rem;
+      color: #444;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </a>
+    <nav>
+      <a href="/games" class="back-btn">← Back to Games</a>
+    </nav>
+  </header>
+
+  <!-- GAME AREA -->
+  <div class="game-container">
+    <div class="game-card">
+      
+      <!-- IN-GAME UI -->
+      <div id="gamePlayArea">
+        <h1 class="question-title">Pattern Matcher</h1>
+        <p class="subtitle">Find the matching pairs to train your memory!</p>
+
+        <div class="stats">
+            <div class="stat-box">Moves: <span id="movesCounter">0</span></div>
+            <div class="stat-box">Matches: <span id="matchesCounter">0</span> / 8</div>
+        </div>
+
+        <div class="memory-grid" id="memoryGrid">
+          <!-- Cards will be generated by JavaScript -->
+        </div>
+
+        <div class="feedback-area">
+          <div class="feedback-message" id="feedbackMessage">Good luck!</div>
+        </div>
+      </div>
+
+      <!-- END SCREEN UI -->
+      <div id="endScreen" style="display: none;">
+        <h2>Amazing Job! 🌟</h2>
+        <p>You found all matches in <b id="finalMoves" style="color: var(--success); font-size: 1.6rem;">0</b> moves.</p>
+        <p id="endMessage">Your memory is getting stronger every day!</p>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 30px;">
+            <button class="option-btn" onclick="initGame()" style="flex:1;">🔄 Play Again</button>
+            <a href="/games" style="text-decoration:none; flex:1;">
+                <button class="option-btn" style="background:#111; color:white; border-color:#111; width:100%;">🎮 Games Hub</button>
+            </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Set of emojis for the cards
+    const emojis = ['🐶', '🐱', '🦋', '🐢', '🐘', '🐧', '🐙', '🐞'];
+    let cardsArray = [];
+    
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let moves = 0;
+    let matches = 0;
+
+    const memoryGrid = document.getElementById('memoryGrid');
+    const movesCounter = document.getElementById('movesCounter');
+    const matchesCounter = document.getElementById('matchesCounter');
+    const feedbackMessage = document.getElementById('feedbackMessage');
+    const gamePlayArea = document.getElementById('gamePlayArea');
+    const endScreen = document.getElementById('endScreen');
+
+    function shuffle(array) {
+      let currentIndex = array.length, randomIndex;
+      while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+      }
+      return array;
+    }
+
+    function initGame() {
+      // Reset game state
+      memoryGrid.innerHTML = '';
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+      moves = 0;
+      matches = 0;
+      
+      movesCounter.textContent = moves;
+      matchesCounter.textContent = matches;
+      
+      gamePlayArea.style.display = 'block';
+      endScreen.style.display = 'none';
+
+      showFeedback("Let's find some matches!", "#444");
+
+      // Duplicate and shuffle
+      cardsArray = [...emojis, ...emojis];
+      cardsArray = shuffle(cardsArray);
+
+      // Create cards HTML
+      cardsArray.forEach((emoji, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('memory-card');
+        cardElement.dataset.emoji = emoji;
+
+        const cardFront = document.createElement('div');
+        cardFront.classList.add('card-front');
+
+        const cardBack = document.createElement('div');
+        cardBack.classList.add('card-back');
+        cardBack.textContent = emoji;
+
+        cardElement.appendChild(cardFront);
+        cardElement.appendChild(cardBack);
+
+        cardElement.addEventListener('click', flipCard);
+        memoryGrid.appendChild(cardElement);
+      });
+    }
+
+    function flipCard() {
+      if (lockBoard) return;
+      if (this === firstCard) return;
+
+      this.classList.add('flipped');
+
+      if (!firstCard) {
+        // First click
+        firstCard = this;
+        return;
+      }
+
+      // Second click
+      secondCard = this;
+      moves++;
+      movesCounter.textContent = moves;
+      
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      let isMatch = firstCard.dataset.emoji === secondCard.dataset.emoji;
+
+      if (isMatch) {
+        disableCards();
+      } else {
+        unflipCards();
+      }
+    }
+
+    function disableCards() {
+      firstCard.removeEventListener('click', flipCard);
+      secondCard.removeEventListener('click', flipCard);
+      
+      firstCard.classList.add('matched');
+      secondCard.classList.add('matched');
+      
+      matches++;
+      matchesCounter.textContent = matches;
+      
+      showFeedback("It's a match! 🎉", "var(--success)");
+
+      resetBoard();
+      
+      // Check for win
+      if (matches === emojis.length) {
+        setTimeout(showEndScreen, 800);
+      }
+    }
+
+    function unflipCards() {
+      lockBoard = true;
+      
+      showFeedback("Oops, try again!", "var(--error)");
+
+      setTimeout(() => {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        
+        showFeedback("Keep looking!", "#444");
+        
+        resetBoard();
+      }, 1000);
+    }
+
+    function resetBoard() {
+      [firstCard, secondCard, lockBoard] = [null, null, false];
+    }
+    
+    function showFeedback(text, color) {
+        feedbackMessage.textContent = text;
+        feedbackMessage.style.color = color;
+        feedbackMessage.classList.add('show');
+    }
+
+    function showEndScreen() {
+      gamePlayArea.style.display = 'none';
+      endScreen.style.display = 'block';
+      document.getElementById('finalMoves').textContent = moves;
+      
+      createConfetti();
+      setTimeout(createConfetti, 500);
+      setTimeout(createConfetti, 1000);
+    }
+
+    // Fun Confetti Effect for Win
+    function createConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        
+        // Random colors
+        const colors = ['#f44336', '#e91e63', '#9c27b0', '#2196f3', '#00bcd4', '#4CAF50', '#8BC34A', '#FFEB3B', '#FF9800'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Random Position around center
+        confetti.style.left = '50%';
+        confetti.style.top = '40%';
+        
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 80 + Math.random() * 150;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+        
+        confetti.style.transform = `translate(-50%, -50%)`;
+        confetti.animate([
+          { transform: `translate(-50%, -50%) scale(1) rotate(0deg)`, opacity: 1 },
+          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], {
+          duration: 1000 + Math.random() * 1500,
+          easing: 'cubic-bezier(.37,0,.63,1)',
+          fill: 'forwards'
+        });
+        
+        document.body.appendChild(confetti);
+        
+        // Cleanup
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    // Start Game
+    initGame();
+  </script>
+</body>
+</html>

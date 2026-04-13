@@ -57,7 +57,11 @@
   </div>
 
   <!-- QUIZ SECTION -->
-  <form method="POST" action="/predict">
+  <!-- ONLY SHOWING IMPORTANT FIXED PART -->
+
+<form method="POST" action="/predict">
+
+  <!-- QUIZ SECTION -->
   <div id="quizSection" class="quiz-wrapper">
     <div class="quiz-header">
       <h2 id="quizTitle">Assessment</h2>
@@ -67,15 +71,93 @@
       </div>
     </div>
 
-    <!-- Questions will be injected here -->
     <div id="questionsContainer"></div>
 
     <div class="quiz-nav">
-      <button type="button" class="quiz-back-btn" id="backBtn" onclick="prevQuestion()" style="visibility:hidden">← Back</button>
+      <button type="button" class="quiz-back-btn" onclick="prevQuestion()" style="visibility:hidden">← Back</button>
       <button type="button" class="quiz-next-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
     </div>
   </div>
-  </form>
+
+  <!-- ✨ ENHANCED DETAILS SECTION -->
+<div id="detailsSection" class="quiz-wrapper" style="display:none;">
+
+  <div class="quiz-header">
+    <h2>Almost Done 🎯</h2>
+    <p>Just a few quick details to make your results more accurate and meaningful.</p>
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" style="width:100%;"></div>
+    </div>
+  </div>
+
+  <div class="question-card-features">
+
+    <!-- AGE -->
+    <div class="input-group">
+      <h3>Child's Age</h3>
+      <p class="input-hint">This helps us interpret developmental patterns appropriately.</p>
+
+      <div class="age-slider-wrap">
+        <input type="range" min="1" max="18" value="5" id="ageSlider" name="age">
+          <div class="age-display">
+            <span id="ageOutput">5</span> years
+          </div>
+      </div>
+    </div>
+    <br>
+
+    <!-- GENDER -->
+    <div class="input-group">
+      <h3>👦🏻👧🏻 Gender</h3>
+      <p class="input-hint">Autism traits can present differently across genders.</p>
+
+      <div class="answer-options">
+        <div class="answer-option" onclick="selectOption('gender','m',this)">♂️ Male</div>
+        <div class="answer-option" onclick="selectOption('gender','f',this)">♀️ Female</div>
+        <br>
+      </div>
+
+      <input type="hidden" name="gender" id="gender">
+    </div>
+
+    <!-- JAUNDICE -->
+    <div class="input-group">
+      <h3>🦠 Jaundice at Birth</h3>
+      <p class="input-hint">Some studies explore early biological factors — this helps refine insights.</p>
+
+      <div class="answer-options">
+        <div class="answer-option" onclick="selectOption('jundice','yes',this)">🟢 Yes</div>
+        <div class="answer-option" onclick="selectOption('jundice','no',this)">🔴 No</div>
+      </div>
+
+      <input type="hidden" name="jundice" id="jundice">
+    </div>
+    <br>
+
+    <!-- FAMILY HISTORY -->
+    <div class="input-group">
+      <h3>👨🏻‍👩🏻‍👧🏻‍👦🏻 Family History of Autism</h3>
+      <p class="input-hint">Autism can have a genetic component.</p>
+
+      <div class="answer-options">
+        <div class="answer-option" onclick="selectOption('austim','yes',this)">🟢 Yes</div>
+        <div class="answer-option" onclick="selectOption('austim','no',this)">🔴 No</div>
+      </div>
+
+      <input type="hidden" name="austim" id="austim">
+    </div>
+
+  </div>
+
+  <!-- NAVIGATION -->
+  <div class="quiz-nav">
+    <button type="button" class="quiz-back-btn" onclick="goBackToQuiz()">← Back</button>
+    <button type="submit" class="quiz-next-btn" onclick="return validateDetails()">Get Results →</button>
+  </div>
+
+</div>
+
+</form>
 
 
 
@@ -136,6 +218,7 @@
 
     <div class="results-actions">
       <button class="retake-btn" onclick="retake()">← Retake Assessment</button>
+      <!--<button class="primary-btn" onclick="downloadPDF()">Download PDF Report ⬇️</button>-->
       <a href="/about"><button class="primary-btn">Learn About Autism →</button></a>
     </div>
   </div>
@@ -157,9 +240,9 @@
       </div>
       <div class="footer-col">
         <h4>Learn</h4>
-        <a href="autism/what-is-autism.html">What is Autism?</a>
-        <a href="autism/signs-and-symptoms.html">Signs & Symptoms</a>
-        <a href="autism/autism-diagnosis.html">Diagnosis</a>  
+        <a href="/autism/what-is-autism">What is Autism?</a>
+        <a href="/autism/signs-and-symptoms">Signs & Symptoms</a>
+        <a href="/autism/autism-diagnosis">Diagnosis</a>  
       </div>
       <div class="footer-col">
         <h4>About</h4>
@@ -176,16 +259,65 @@
 
 // ===== QUESTIONS (10 ONLY) =====
 const parentQuestions = [
-  { question: "Responds to Name", text: "When you call your child’s name, how often do they respond?", explain: "Example: Calling from another room — do they respond?" },
-  { question: "Eye Contact", text: "How often does your child maintain eye contact?", explain: "Do they look at your face while talking?" },
-  { question: "Gestures", text: "How often does your child use gestures?", explain: "Pointing, waving, showing things." },
-  { question: "Interest in Others", text: "How often does your child show interest in others?", explain: "Playing or interacting with other children." },
-  { question: "Sharing", text: "How often does your child share things?", explain: "Showing toys or objects." },
-  { question: "Repetitive Behavior", text: "How often does your child repeat actions?", explain: "Hand flapping, rocking." },
-  { question: "Understanding", text: "How often does your child understand instructions?", explain: "Like 'come here', 'sit down'." },
-  { question: "Imitation", text: "How often does your child copy actions?", explain: "Clapping, waving." },
-  { question: "Routine Change", text: "How often does your child get upset with changes?", explain: "Change in routine." },
-  { question: "Sensitivity", text: "How often is your child sensitive to sound or touch?", explain: "Covers ears or avoids touch." }
+  { 
+    question: "Eye Contact", 
+    text: "Does the child avoid looking at people while talking or listening?", 
+    explain: "Example: looks away, looks at the floor, or doesn’t look at your face during conversation." 
+  },
+
+  { 
+    question: "Playing with Others", 
+    text: "Does the child often prefer to play alone instead of playing with other children?", 
+    explain: "Example: chooses solo activities even when other kids are around and inviting them." 
+  },
+
+  { 
+    question: "Understanding Feelings", 
+    text: "Does the child find it hard to understand how others are feeling?", 
+    explain: "Example: doesn’t notice when someone is sad, upset, or happy." 
+  },
+
+  { 
+    question: "Routine Change", 
+    text: "Does the child get very upset when their daily routine changes?", 
+    explain: "Example: getting angry or anxious if meal time, school time, or usual plans change." 
+  },
+
+  { 
+    question: "Repetitive Behavior", 
+    text: "Does the child repeat the same words, phrases, or actions again and again?", 
+    explain: "Example: repeating lines from TV, saying the same thing multiple times, or doing the same movement repeatedly." 
+  },
+
+  { 
+    question: "Starting Conversations", 
+    text: "Does the child find it difficult to start or continue a conversation with others?", 
+    explain: "Example: doesn’t initiate talking, waits for others to speak first, or stays silent in social situations." 
+  },
+
+  { 
+    question: "Sharing Happiness", 
+    text: "How often does the child share things they enjoy with others?", 
+    explain: "Example: Does the child show toys, drawings, or exciting things to parents or friends?" 
+  },
+
+  { 
+    question: "Sensitivity", 
+    text: "Is the child very sensitive to certain sounds, textures, or touch?", 
+    explain: "Example: covers ears for normal sounds, dislikes certain clothes, or avoids being touched." 
+  },
+
+  { 
+    question: "Imaginative Play", 
+    text: "Does the child find it difficult to play pretend or use imagination?", 
+    explain: "Example: doesn’t play 'house', 'teacher', or pretend games with toys." 
+  },
+
+  { 
+    question: "Social Situations", 
+    text: "Does the child often feel uncomfortable or overwhelmed in social situations?", 
+    explain: "Example: avoids crowds, gets anxious in gatherings, or wants to leave quickly." 
+  }
 ];
 
 let currentIndex = 0;
@@ -195,6 +327,10 @@ let answers = {};
 function startQuiz() {
   document.getElementById('selector').style.display = 'none';
   document.getElementById('quizSection').classList.add('active');
+
+  // ✅ IMPORTANT RESET
+  document.getElementById("detailsSection").style.display = "none";
+
   buildQuestions();
   showQuestion(0);
 }
@@ -212,7 +348,7 @@ function buildQuestions() {
           <h3>${q.question}</h3>
           <p>${q.text}</p>
 
-          <button type="button" onclick="toggleExplain(${i})">💡 Explain </button>
+          <button type="button" class="cool-btn" onclick="toggleExplain(${i})">💡 Explain </button>
           <div id="explain-${i}" style="display:none;">${q.explain}</div>
 
           <div class="answer-options">
@@ -232,20 +368,14 @@ function buildQuestions() {
 // ===== OPTIONS =====
 function option(i, score, label) {
   return `
-    <label class="answer-option" onclick="selectAnswer(${i},${score})">
-      <input type="radio" name="q${i}" style="margin-right:8px;">
+    <div class="answer-option" onclick="selectAnswer(${i},${score})">
       ${label}
-    </label>
+    </div>
   `;
 }
 
 // ===== SELECT ANSWER =====
 function selectAnswer(i, score) {
-
-  // highlight selected option
-  document.querySelectorAll(`input[name="q${i}"]`).forEach(el => {
-    el.checked = false;
-  });
 
   let options = document.querySelectorAll(`#q-${i} .answer-option`);
   options.forEach(opt => opt.classList.remove("selected"));
@@ -253,7 +383,7 @@ function selectAnswer(i, score) {
   let selected = options[score];
   selected.classList.add("selected");
 
-  // convert for ML
+  // SIMPLE LOGIC
   let val = (score >= 2) ? 1 : 0;
 
   document.getElementById(`input-q${i}`).value = val;
@@ -280,7 +410,9 @@ function nextQuestion() {
     currentIndex++;
     showQuestion(currentIndex);
   } else {
-    document.querySelector("form").submit();
+    // 🔥 instead of submitting → show details page
+    document.getElementById("quizSection").style.display = "none";
+    document.getElementById("detailsSection").style.display = "block";
   }
 }
 
@@ -292,10 +424,60 @@ function prevQuestion(){
   }
 }
 
+//=====Go back to quiz====
+function goBackToQuiz() {
+  document.getElementById("detailsSection").style.display = "none";
+  document.getElementById("quizSection").style.display = "block";
+}
+
 // ===== EXPLAIN =====
 function toggleExplain(i){
   let e = document.getElementById(`explain-${i}`);
   e.style.display = (e.style.display==="none") ? "block" : "none";
+}
+
+// ===== SELECT OPTION (GENDER / JAUNDICE / FAMILY HISTORY) =====
+function selectOption(field, value, element) {
+  // 1. Remove 'selected' class from all options in the same group
+  let options = element.parentElement.querySelectorAll('.answer-option');
+  options.forEach(opt => opt.classList.remove('selected'));
+  // 2. Add 'selected' class to clicked option
+  element.classList.add('selected');
+  // 3. Set hidden input value
+  document.getElementById(field).value = value;
+}
+
+// ===== AGE SLIDER =====
+const ageSlider = document.getElementById("ageSlider");
+const ageOutput = document.getElementById("ageOutput");
+// Set initial value
+ageOutput.innerText = ageSlider.value;
+// Update on slider move
+ageSlider.addEventListener("input", function() {
+  ageOutput.innerText = this.value;
+});
+
+function updateAge(val) {
+  document.getElementById("ageValue").innerText = val;
+}
+
+function validateDetails() {
+  const gender = document.getElementById("gender").value;
+  const jundice = document.getElementById("jundice").value;
+  const austim = document.getElementById("austim").value;
+
+  if (!gender || !jundice || !austim) {
+    alert("Please fill all details before proceeding.");
+    return false;
+  }
+
+  // If all fields are filled → submit form
+  document.querySelector("form").submit();
+}
+
+function downloadPDF() {
+  document.querySelector("form").action = "/download-pdf";
+  document.querySelector("form").submit();
 }
 
 </script>

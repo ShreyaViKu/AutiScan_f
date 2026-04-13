@@ -79,33 +79,6 @@ nav a:hover {
 
 /* ================= HERO SECTION ================= */
 
-.games-container {
-  display: flex;
-  gap: 20px;
-  padding: 40px;
-  justify-content: center;
-}
-
-.game-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.game-area {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.card-box {
-  background: #eef;
-  padding: 20px;
-  border-radius: 12px;
-  text-align: center;
-}
-
 .hero {
   text-align: center;
   padding: 120px 20px;
@@ -871,6 +844,13 @@ nav a:hover {
   opacity: 0.7;
 }
 
+.cta-section-therapy {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #e9e3dc 0%, #ded6cd 100%);
+  text-align: center;
+  position: relative;
+}
+
 @media (max-width: 768px) {
   .cta-section h2 { font-size: 38px; }
   .cta-subtext { font-size: 18px; }
@@ -1330,6 +1310,13 @@ nav a:hover {
     grid-template-columns: 1.1fr 0.9fr;
     gap: 60px;
     align-items: center;
+}
+
+.knowledge-content-right {
+    display: grid;
+    grid-template-columns: 60fr; /* flipped */
+    gap: 60px;
+    align-items: right;
 }
 
 .knowledge-text h2 {
@@ -1808,6 +1795,24 @@ nav a:hover {
   margin-bottom: 12px;
 }
 
+.cool-btn {
+  background: rgb(239, 212, 212);
+  color: black;
+  border: none;
+  padding: 8px 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 13px;
+}
+
+.cool-btn:hover {
+  background: rgb(235, 149, 149);
+  transform: scale(1.05);
+}
+
 /* ================================= */
 /* FOOTER                            */
 /* ================================= */
@@ -1816,14 +1821,6 @@ nav a:hover {
   background: #111;
   color: #ccc;
   padding: 80px 60px 40px;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 60px;
-  max-width: 1300px;
-  margin: 0 auto 60px;
 }
 
 .footer-brand .logo {
@@ -2095,12 +2092,6 @@ nav a:hover {
   font-style: italic;
 }
 
-.answer-options {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
 .answer-option {
   display: flex;
   align-items: center;
@@ -2117,6 +2108,12 @@ nav a:hover {
   margin: 5px 0;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.answer-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .answer-option:hover {
@@ -2209,6 +2206,100 @@ nav a:hover {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.detail-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.detail-card:hover {
+  transform: translateY(-4px);
+}
+
+.option-cards {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.option-card {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #f1f3f6;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.option-card:hover {
+  background: #e0e7ff;
+}
+
+.option-card.selected {
+  background: #6366f1;
+  color: white;
+}
+
+.age-display {
+  margin-top: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.question-card-features {
+  padding: 25px;
+}
+
+.age-slider-wrap {
+  margin-top: 15px;
+}
+
+/* Space between each section inside the card */
+.question-card .input-group {
+  margin-bottom: 30px;
+}
+
+/* Space between heading and hint text */
+.input-group h3 {
+  margin-bottom: 8px;
+}
+
+.input-hint {
+  margin-bottom: 15px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Space between options */
+.answer-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Make each option breathe */
+.answer-option {
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+input[type="range"] {
+  width: 100%;
 }
 
 /* ================================= */
@@ -2503,3 +2594,248 @@ nav a:hover {
   .wa-hero h1 { font-size: 34px; }
   .screening-hero h1 { font-size: 34px; }
 }
+
+
+
+/* ================================= */
+/* THERAPIES SECTION                 */
+/* ================================= */
+
+/* SECTION */
+.therapy-section {
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: center; /* 🔥 THIS centers everything */
+}
+
+/* REMOVE right alignment */
+.therapy-block {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* instead of flex-end */
+}
+
+/* CARD */
+.therapy-card {
+  max-width: 700px;
+  width: 100%;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  text-align: left; /* keeps text readable */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ================================= */
+/* ABOUT AUTISM SECTION              */
+/* ================================= */
+
+
+:root {
+  --primary: #d6a695;
+  --accent: #ddbc8b;
+  --soft-bg: #f7f9fc;
+  --text: #131011;
+  --muted: #000000;
+  --white: #ffffff;
+}
+
+/* GLOBAL */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  color: var(--text);
+  background: var(--soft-bg);
+  line-height: 1.7;
+}
+
+h1, h2, h3 {
+  margin-bottom: 10px;
+}
+
+p {
+  color: var(--muted);
+}
+
+/* HERO */
+.wa-hero {
+  background: linear-gradient(135deg, #d29c77, #efccb5);
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.wa-label {
+  font-size: 13px;
+  letter-spacing: 2px;
+  opacity: 0.8;
+}
+
+.wa-hero h1 {
+  font-size: 42px;
+  margin: 10px 0;
+}
+
+.wa-hero-sub {
+  max-width: 600px;
+  margin: auto;
+  font-size: 18px;
+}
+
+/* CONTENT SECTIONS */
+.wa-content {
+  padding: 60px 20px;
+}
+
+.wa-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* LIGHT SECTION */
+.wa-content.light {
+  background: #ffffff;
+  border-radius: 20px;
+  margin: 40px auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* ACCENT SECTION */
+.wa-content.accent {
+  background: linear-gradient(135deg, #eef3ff, #f0fbfc);
+}
+
+/* SPLIT SECTION */
+.wa-split {
+  padding: 60px 20px;
+}
+
+.wa-split-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.wa-left {
+  flex: 1;
+}
+
+.wa-right {
+  flex: 1;
+}
+
+/* CARD BOX */
+.wa-box {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.wa-box ul {
+  padding-left: 20px;
+}
+
+/* GRID */
+.wa-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.wa-grid div {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.wa-grid div:hover {
+  transform: translateY(-5px);
+}
+
+/* NAVBAR */
+.navbar {
+  background: white;
+  padding: 15px 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-right a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.cta-btn {
+  background: var(--primary);
+  color: white !important;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+
+/* TOPIC NAV */
+.topic-nav {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.topic-links a {
+  margin: 8px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  background: #e9efff;
+  color: var(--primary);
+  display: inline-block;
+}
+
+.active-topic {
+  background: var(--primary);
+  color: white !important;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+/*
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  color: #aaa;
+}
+  */

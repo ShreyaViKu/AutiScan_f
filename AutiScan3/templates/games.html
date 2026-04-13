@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutiScan — Learning Games</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+
+  <style>
+    :root {
+      --primary: #111;
+      --secondary: #e8d3c9;
+      --text: #222;
+      --bg: #f4f4f4;
+      --card-bg: rgba(255, 255, 255, 0.75);
+    }
+    
+    body {
+      background-color: var(--bg);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background: #e9e6e6;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 20px;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: #111;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+
+    .nav-links a {
+      margin-left: 2rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover {
+      opacity: 0.6;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(180deg, #e4b3a8 0%, #e6c3b4 40%, #e9d4c7 100%);
+    }
+
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .hero-section p {
+      font-size: 1.2rem;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .games-section {
+      background: radial-gradient(circle at top left, #f4ece6, #e9e3dc);
+      padding: 80px 20px;
+      min-height: calc(100vh - 350px);
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+    }
+
+    .icon-wrapper {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #b08c63, #8e6c8a);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 15px rgba(176,140,99,0.3);
+    }
+
+    .game-card h3 {
+      font-size: 1.4rem;
+      margin: 0 0 1rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .game-card p {
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      flex-grow: 1;
+      font-size: 1.05rem;
+    }
+
+    .play-btn {
+      display: inline-block;
+      text-align: center;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 15px;
+    }
+
+    .play-btn:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .nav-links a {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </a>
+    <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/games" style="color: var(--primary); font-weight: 700;">Games</a>
+      <a href="/screening" style="background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 999px;">Screening</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <h1>Play & Learn</h1>
+    <p>Engaging, evidence-based interactive games designed to support cognitive, social, and emotional development in children.</p>
+  </section>
+
+  <!-- GAMES GRID -->
+  <section class="games-section">
+    <div class="games-grid">
+      
+      <!-- Emotion Game (The one we built) -->
+      <div class="game-card">
+        <div class="icon-wrapper">😊</div>
+        <h3>Emotion Recognition</h3>
+        <p>A fun and colorful game to help children identify different feelings like happy, sad, angry, and surprised through interactive facial expressions.</p>
+        <a href="/game/emotion" class="play-btn">Play Now →</a>
+      </div>
+
+      <!-- Eye Contact -->
+      <div class="game-card">
+        <div class="icon-wrapper">👀</div>
+        <h3>Eye Contact & Following</h3>
+        <p>Supports joint attention by following friendly characters across the screen, improving visual tracking skills.</p>
+        <a href="/game/eye" class="play-btn">Play Now →</a>
+      </div>
+
+      <!-- Speech Therapy -->
+      <div class="game-card">
+        <div class="icon-wrapper">🗣️</div>
+        <h3>Sound Repeat</h3>
+        <p>Encourages verbal communication and vocalization by having the child repeat fun animal sounds and simple words.</p>
+        <a href="/game/speech" class="play-btn">Play Now →</a>
+      </div>
+
+      <!-- Social Skills -->
+      <div class="game-card">
+        <div class="icon-wrapper">🤝</div>
+        <h3>Social Scenarios</h3>
+        <p>Interactive storybooks that help children navigate everyday social situations like sharing and taking turns.</p>
+        <a href="/game/social" class="play-btn">Play Now →</a>
+      </div>
+
+      <!-- Flexibility -->
+      <div class="game-card">
+        <div class="icon-wrapper">🔄</div>
+        <h3>Transition Time</h3>
+        <p>Helps children practice cognitive flexibility and handling routine changes through engaging matching puzzles.</p>
+        <a href="/game/flex" class="play-btn">Play Now →</a>
+      </div>
+
+      <!-- Memory -->
+      <div class="game-card">
+        <div class="icon-wrapper">🧩</div>
+        <h3>Pattern Memory</h3>
+        <p>Enhances working memory and pattern recognition with a series of visually stimulating matching challenges.</p>
+        <a href="/game/memory" class="play-btn">Play Now →</a>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>
