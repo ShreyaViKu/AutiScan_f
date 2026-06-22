@@ -714,7 +714,7 @@ def save_game():
 
 
 
-# 🔹 Load ensemble models
+# Load ensemble models
 lr_model, nn_model, rf_model = pickle.load(open("model/autism_model.pkl", "rb"))
 
 # -------- MAIN PAGES --------
@@ -868,7 +868,7 @@ def nearby_doctors():
 def predict():
     import pandas as pd
 
-    # ✅ Feature columns in the same order as training
+    # Feature columns in the same order as training
     feature_cols = [
         'A1_Score','A2_Score','A3_Score','A4_Score','A5_Score',
         'A6_Score','A7_Score','A8_Score','A9_Score','A10_Score',
@@ -877,12 +877,12 @@ def predict():
 
     data_list = []
 
-    # 🔹 Collect quiz answers (10 questions)
+    # Collect quiz answers (10 questions)
     for i in range(10):
         val = request.form.get(f"q{i}")
         data_list.append(int(val) if val else 0)
 
-    # 🔹 Collect additional details and map properly
+    # Collect additional details and map properly
     # Age
     age_raw = request.form.get("age")
     age = int(age_raw) if age_raw else 5
@@ -908,10 +908,10 @@ def predict():
 
     print("FINAL INPUT:", data_list)
 
-    # 🔹 Convert to DataFrame with correct column order
+    # Convert to DataFrame with correct column order
     df_input = pd.DataFrame([data_list], columns=feature_cols)
 
-    # 🔹 Ensemble prediction
+    # Ensemble prediction
     lr_prob = lr_model.predict_proba(df_input)[0][1]
     nn_prob = nn_model.predict_proba(df_input)[0][1]
     rf_prob = rf_model.predict_proba(df_input)[0][1]
@@ -922,7 +922,7 @@ def predict():
     calibrated_prob = 0.5 + (final_prob - 0.5) * 0.6
     percent = round(calibrated_prob * 100, 2)
 
-    # 🔹 Risk spectrum
+    # Risk spectrum
     if percent < 20:
         spectrum = "Very Low Risk"
     elif percent < 40:
@@ -974,7 +974,7 @@ def predict():
         print("SHAP Error:", e)
         shap_insights = {"top_positive": [], "top_negative": []}
 
-    # 🔹 Dynamic Game Recommendations based on Assessment Answers
+    # Dynamic Game Recommendations based on Assessment Answers
     answers = data_list[:10]
     suggested_games = []
     
@@ -1071,7 +1071,7 @@ def predict():
         gender=gender,
         jundice=jundice,
         austim=austim,
-        games=games,   # ✅ ADD THIS
+        games=games,   # Add this
         child_name=child_name,
         shap_insights=shap_insights
     )
@@ -1088,13 +1088,13 @@ def download_pdf():
     gender = int(request.form.get("gender"))
     jundice = int(request.form.get("jundice"))
     austim = int(request.form.get("austim"))
-    name = request.form.get("name", "Unknown")  # 🔹 default if somehow missing
+    name = request.form.get("name", "Unknown")  # default if somehow missing
     
 
-    # 🔹 Convert percent to float for logic
+    # Convert percent to float for logic
     percent_val = float(percent)
 
-    # 🔹 Summary
+    # Summary
     if percent_val < 20:
         summary = "The screening indicates a very low likelihood of autism traits."
     elif percent_val < 40:
@@ -1106,7 +1106,7 @@ def download_pdf():
     else:
         summary = "The screening indicates a very high likelihood of autism traits."
 
-    # 🔹 Recommendation
+    # Recommendation
     if percent_val >= 60:
         recommendation = "It is recommended to consult a pediatrician or child psychologist for further evaluation."
     elif percent_val >= 40:
@@ -1186,7 +1186,7 @@ def download_pdf():
         mimetype='application/pdf'
     )
 
-# 🔹 Print model path info and start server
+# Print model path info and start server
 if __name__ == "__main__":
     model_path = os.path.abspath("model/autism_model.pkl")
     print("MODEL PATH:", model_path)

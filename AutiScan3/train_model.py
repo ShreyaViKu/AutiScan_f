@@ -22,8 +22,7 @@ data = pd.read_csv("autism_child_data.csv")
 
 
 
-# -----------------------------
-# 🔥 3. Encoding categorical features (PASTE HERE)
+# 3. Encoding categorical features
 # -----------------------------
 # CLEAN values first
 data['gender'] = data['gender'].str.lower().str.strip()
@@ -86,8 +85,7 @@ mlp_pipeline = Pipeline([
 
 mlp_pipeline.fit(X_train, y_train)
 
-# -----------------------------
-# 7. Random Forest (Extra boost 🔥)
+# 7. Random Forest
 # -----------------------------
 rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_model.fit(X_train, y_train)
@@ -105,4 +103,4 @@ print("RF Accuracy:", accuracy_score(y_test, rf_model.predict(X_test)))
 pickle.dump((best_lr, mlp_pipeline, rf_model),
             open("model/autism_model.pkl", "wb"))
 
-print("🔥 Ensemble model saved successfully!")
+print("Ensemble model saved successfully!")
