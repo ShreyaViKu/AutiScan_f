@@ -1,0 +1,453 @@
+<style>
+  /* AURA Chatbot Styles */
+  #aura-chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* The Chat Button */
+  #aura-chat-btn {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #e27d60, #e85a4f);
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(226, 125, 96, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 3px solid white;
+    position: relative;
+  }
+
+  #aura-chat-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(226, 125, 96, 0.6);
+  }
+
+  /* Cute Animated Avatar */
+  .aura-avatar {
+    font-size: 35px;
+    animation: bounce 2s infinite ease-in-out;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  /* Chat Window */
+  #aura-chat-window {
+    display: none;
+    position: absolute;
+    bottom: 85px;
+    right: 0;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    flex-direction: column;
+    border: 1px solid #f0f0f0;
+  }
+
+  .aura-chat-header {
+    background: linear-gradient(135deg, #e27d60, #e85a4f);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .aura-header-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .aura-header-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .aura-header-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.9;
+  }
+
+  .aura-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* Chat Messages Area */
+  #aura-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .chat-msg {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  .chat-msg.bot {
+    background: white;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+  }
+
+  .chat-msg.user {
+    background: #e27d60;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 2px 5px rgba(226, 125, 96, 0.2);
+  }
+
+  /* Input Area */
+  .aura-chat-input {
+    display: flex;
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+    gap: 10px;
+  }
+
+  .aura-chat-input input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.3s;
+  }
+
+  .aura-chat-input input:focus {
+    border-color: #e27d60;
+  }
+
+  .aura-chat-input button {
+    background: #e27d60;
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: background 0.3s;
+  }
+
+  .aura-chat-input button:hover {
+    background: #e85a4f;
+  }
+
+  /* Typing indicator */
+  .typing-indicator {
+    display: none;
+    align-self: flex-start;
+    background: white;
+    padding: 12px 16px;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    border: 1px solid #eee;
+  }
+
+  .typing-indicator span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #aaa;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: typing 1.4s infinite ease-in-out both;
+  }
+
+  .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+  .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes typing {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+  }
+  
+  /* Markdown Styles inside bot messages */
+  .chat-msg.bot p { margin: 0 0 10px 0; }
+  .chat-msg.bot p:last-child { margin: 0; }
+  .chat-msg.bot ul { margin: 5px 0; padding-left: 20px; }
+  .chat-msg.bot li { margin-bottom: 5px; }
+  .chat-msg.bot strong { color: #e85a4f; }
+
+  /* Suggestions */
+  .aura-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
+  }
+  .aura-suggestions button {
+    background: white;
+    border: 1px solid #e27d60;
+    color: #e27d60;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .aura-suggestions button:hover {
+    background: #e27d60;
+    color: white;
+  }
+  
+  /* Pop-up attention bubble */
+  #aura-attention-bubble {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    background: white;
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(10px);
+    border: 1px solid #eee;
+  }
+  #aura-attention-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+</style>
+
+<div id="aura-chat-widget">
+  <div id="aura-chat-window">
+    <div class="aura-chat-header">
+      <div class="aura-header-info">
+        <div class="aura-avatar" style="animation: none; font-size: 28px;">✨</div>
+        <div>
+          <h3>AURA</h3>
+          <p>Your AutiScan AI Assistant</p>
+        </div>
+      </div>
+      <button class="aura-close-btn" onclick="toggleAuraChat()">&times;</button>
+    </div>
+    
+    <div id="aura-messages">
+      <div class="chat-msg bot">
+        Hi there! I'm AURA ✨. I'm here to help you understand your child's progress, answer questions about autism, and guide you through the website. How can I assist you today?
+      </div>
+      
+      <div class="aura-suggestions" id="aura-initial-suggestions">
+        <button onclick="sendSuggestedMessage('What is AutiScan?')">What is AutiScan?</button>
+        <button onclick="sendSuggestedMessage('How do I take a screening test?')">How do I take a screening test?</button>
+        <button onclick="sendSuggestedMessage('How is my child doing?')">How is my child doing?</button>
+      </div>
+
+      <!-- Messages will appear here -->
+      <div class="typing-indicator" id="aura-typing">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    
+    <div class="aura-chat-input">
+      <input type="text" id="aura-input" placeholder="Type your message..." onkeypress="handleAuraEnter(event)">
+      <button onclick="sendAuraMessage()">➤</button>
+    </div>
+  </div>
+  
+  <div id="aura-attention-bubble">
+    Hi! Need some help? 👋
+  </div>
+  <div id="aura-chat-btn" onclick="toggleAuraChat()">
+    <div class="aura-avatar">✨</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  function toggleAuraChat() {
+    const chatWindow = document.getElementById('aura-chat-window');
+    if (chatWindow.style.display === 'flex') {
+      chatWindow.style.display = 'none';
+    } else {
+      chatWindow.style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('aura-input').focus();
+      }, 100);
+    }
+  }
+
+  function handleAuraEnter(event) {
+    if (event.key === 'Enter') {
+      sendAuraMessage();
+    }
+  }
+
+  async function sendAuraMessage() {
+    const inputField = document.getElementById('aura-input');
+    const message = inputField.value.trim();
+    if (!message) return;
+
+    // Add user message to UI
+    addMessageToUI(message, 'user');
+    inputField.value = '';
+
+    // Show typing indicator
+    document.getElementById('aura-typing').style.display = 'block';
+    scrollToBottom();
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message })
+      });
+
+      const data = await response.json();
+      
+      document.getElementById('aura-typing').style.display = 'none';
+      
+      if (response.ok) {
+        addMessageToUI(data.response, 'bot', true);
+      } else {
+        addMessageToUI("Oops, something went wrong on my end. Please try again later!", 'bot');
+      }
+    } catch (error) {
+      document.getElementById('aura-typing').style.display = 'none';
+      addMessageToUI("Sorry, I couldn't connect right now. Please check your internet connection.", 'bot');
+    }
+  }
+
+  function sendSuggestedMessage(msg) {
+    // Hide initial suggestions if they are there
+    const initialSuggestions = document.getElementById('aura-initial-suggestions');
+    if (initialSuggestions) {
+      initialSuggestions.style.display = 'none';
+    }
+    
+    // Hide all other dynamically created suggestion blocks
+    document.querySelectorAll('.dynamic-suggestions').forEach(el => el.style.display = 'none');
+
+    const inputField = document.getElementById('aura-input');
+    inputField.value = msg;
+    sendAuraMessage();
+  }
+
+  function addMessageToUI(text, sender, isMarkdown = false) {
+    const messagesContainer = document.getElementById('aura-messages');
+    const typingIndicator = document.getElementById('aura-typing');
+    
+    let displayHtml = "";
+    let suggestionsHtml = "";
+    
+    // Parse SUGGESTED_QUESTIONS if present
+    if (sender === 'bot') {
+        const regex = /SUGGESTED_QUESTIONS:(.*)/is;
+        const match = text.match(regex);
+        if (match && match[1]) {
+            const rawSuggestions = match[1].split('|').map(s => s.trim()).filter(s => s.length > 0);
+            text = text.replace(regex, '').trim();
+            
+            if (rawSuggestions.length > 0) {
+                suggestionsHtml = `<div class="aura-suggestions dynamic-suggestions">`;
+                rawSuggestions.forEach(sug => {
+                    // remove markdown asterisks if any
+                    let cleanSug = sug.replace(/\*/g, '');
+                    suggestionsHtml += `<button onclick="sendSuggestedMessage('${cleanSug.replace(/'/g, "\\'")}')">${cleanSug}</button>`;
+                });
+                suggestionsHtml += `</div>`;
+            }
+        }
+    }
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg ' + sender;
+    
+    if (isMarkdown && sender === 'bot') {
+        msgDiv.innerHTML = marked.parse(text);
+    } else {
+        msgDiv.innerText = text;
+    }
+    
+    // Insert before typing indicator
+    messagesContainer.insertBefore(msgDiv, typingIndicator);
+    
+    if (suggestionsHtml) {
+        const sugDiv = document.createElement('div');
+        sugDiv.innerHTML = suggestionsHtml;
+        messagesContainer.insertBefore(sugDiv, typingIndicator);
+    }
+
+    scrollToBottom();
+  }
+
+  function scrollToBottom() {
+    const messagesContainer = document.getElementById('aura-messages');
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  // Pop-up attention logic
+  let chatOpened = false;
+  setTimeout(() => {
+    if (!chatOpened && document.getElementById('aura-chat-window').style.display !== 'flex') {
+      const bubble = document.getElementById('aura-attention-bubble');
+      if (bubble) {
+        bubble.classList.add('show');
+        // Hide it after 5 seconds
+        setTimeout(() => {
+           bubble.classList.remove('show');
+        }, 5000);
+      }
+    }
+  }, 10000); // Pops up after 10 seconds of page load
+
+  // Override toggle to hide bubble
+  const originalToggle = toggleAuraChat;
+  toggleAuraChat = function() {
+      chatOpened = true;
+      const bubble = document.getElementById('aura-attention-bubble');
+      if (bubble) bubble.classList.remove('show');
+      originalToggle();
+  };
+
+</script>

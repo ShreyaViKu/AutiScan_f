@@ -60,6 +60,22 @@ nav a:hover {
   opacity: 0.6;
 }
 
+.login-btn-nav {
+  color: #e27d60;
+  border: 2px solid #e27d60;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.login-btn-nav:hover {
+  background: #e27d60;
+  color: white;
+  box-shadow: 0 4px 10px rgba(226, 125, 96, 0.3);
+}
+
 .nav-btn {
   background: #111;
   color: white;

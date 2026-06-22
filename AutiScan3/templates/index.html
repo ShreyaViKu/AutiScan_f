@@ -24,6 +24,16 @@
       <a href="/">Home</a>
       <a href="/#how">How It Works</a>
       <a href="/about">About Autism</a>
+      <a href="/games">Games</a>
+      
+      {% if current_user %}
+        <span style="font-weight: 600; color: #e27d60; margin-left: 10px;">Hi, {{ current_user_name }}</span>
+        <a href="/dashboard" style="font-weight: 600; margin-left: 15px;">Dashboard</a>
+        <a href="/logout" style="font-weight: 600; margin-left: 15px;">Logout</a>
+      {% else %}
+        <a href="/login" class="login-btn-nav" style="margin-right: 15px;">Login</a>
+      {% endif %}
+
       <a href="/screening" class="nav-btn">START SCREENING</a>
     </nav>
   </header>
@@ -179,8 +189,8 @@
     <div class="how-grid">
       <div class="how-card">
         <div class="icon-circle">📋</div>
-        <h3>Choose Assessment</h3>
-        <p>Select parent/caregiver or self-assessment based on who you're evaluating.</p>
+        <h3>Begin Assessment</h3>
+        <p>Start the parent/caregiver assessment to evaluate your child's behaviors.</p>
       </div>
       <div class="how-card">
         <div class="icon-circle">💬</div>
@@ -203,9 +213,9 @@
   <!-- WHO IS THIS FOR SECTION -->
   <section class="who-section">
     <h2>Who Is This For</h2>
-    <div class="who-grid">
-      <div class="who-card">
-        <div class="who-icon">👨‍👩‍👧</div>
+    <div class="who-grid" style="display: flex; justify-content: center; width: 100%;">
+      <div class="who-card" style="max-width: 650px; width: 100%; padding: 3rem;">
+        <div class="who-icon" style="font-size: 4rem;">👨‍👩‍👧</div>
         <h3>Parent/Caregiver Assessment</h3>
         <p class="age-text">For children ages 18 months – 12 years</p>
         <p class="description">
@@ -215,19 +225,6 @@
         <div class="who-footer">
           <span class="time">⏱ 10–15 minutes</span>
           <a href="/screening?type=parent" class="secondary-btn">START →</a>
-        </div>
-      </div>
-      <div class="who-card">
-        <div class="who-icon">🧑</div>
-        <h3>Self-Assessment</h3>
-        <p class="age-text">For adolescents and adults 13+</p>
-        <p class="description">
-          Explore your own traits and characteristics
-          in a supportive, judgment-free environment.
-        </p>
-        <div class="who-footer">
-          <span class="time">⏱ 15–20 minutes</span>
-          <a href="/screening?type=self" class="secondary-btn">START →</a>
         </div>
       </div>
     </div>
@@ -257,6 +254,39 @@
         <h3>Supportive Approach</h3>
         <p>We provide information in a respectful, neurodiversity-affirming manner.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- GAMES SECTION -->
+  <section id="games-info" class="how-section" style="background: radial-gradient(circle at right, #f4ece6, #f9f6f4);">
+    <h2>Therapeutic Learning Games</h2>
+    <p style="text-align: center; max-width: 700px; margin: 0 auto 3rem; color: #666; font-size: 1.15rem; line-height: 1.6;">
+        Play is a powerful tool for early development. Our interactive game hub is thoughtfully designed to support emotional recognition, cognitive flexibility, and vital social skills in a safe, judgment-free space.
+    </p>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="icon-circle" style="background: #fffbeb; color: #b45309;">🧠</div>
+        <h3>Cognitive Growth</h3>
+        <p>Improves working memory, pattern recognition, and focus through engaging matching tasks.</p>
+      </div>
+      <div class="how-card">
+        <div class="icon-circle" style="background: #f0fdf4; color: #15803d;">😊</div>
+        <h3>Emotion Recognition</h3>
+        <p>Helps children identify and understand complex human emotions with clear visual cues.</p>
+      </div>
+      <div class="how-card">
+        <div class="icon-circle" style="background: #eff6ff; color: #1d4ed8;">🔄</div>
+        <h3>Adaptability</h3>
+        <p>Trains cognitive flexibility by gently encouraging children to adapt to changing rules.</p>
+      </div>
+      <div class="how-card">
+        <div class="icon-circle" style="background: #fdf4ff; color: #a21caf;">✨</div>
+        <h3>Stress-Free Play</h3>
+        <p>Positive reinforcement and sensory-friendly graphics create an optimal environment for safe learning.</p>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3.5rem;">
+      <a href="/games" class="primary-btn" style="text-decoration:none; padding: 1rem 3rem;">Explore the Games Hub →</a>
     </div>
   </section>
 
@@ -320,7 +350,6 @@
       <div class="footer-col">
         <h4>Screening</h4>
         <a href="/screening">Parent/Caregiver</a>
-        <a href="/screening">Self-Assessment</a>
         <a href="#how">How It Works</a>
       </div>
       <div class="footer-col">
@@ -378,5 +407,6 @@
     document.querySelectorAll(".spectrum-card, .how-card, .who-card, .trust-card, .next-card").forEach(el => observer.observe(el));
   </script>
 
+{% include 'chatbot.html' %}
 </body>
 </html>

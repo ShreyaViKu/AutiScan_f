@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dr. {{ doctor.name }} | AutiScan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    body { background: #fdfaf8; font-family: 'Inter', sans-serif; margin: 0; padding: 0; color: #333;}
+    .navbar { background: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.03); }
+    .logo {font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 8px; text-decoration: none; color: #333;}
+    .logo-icon { background: #e27d60; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center;}
+    .nav-links a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover { color: #e27d60; }
+
+    .profile-container {
+      max-width: 800px;
+      margin: 4rem auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, #e27d60, #e85a4f);
+      padding: 3rem 2rem;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      opacity: 0.9;
+      transition: 0.3s;
+    }
+    .back-link:hover { opacity: 1; transform: translateX(-3px); }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .profile-header h1 { margin: 0; font-size: 2.2rem; }
+    .profile-header p { margin: 5px 0 0; font-size: 1.1rem; opacity: 0.9; }
+
+    .profile-body {
+      padding: 3rem 2rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .info-item h3 {
+      color: #e27d60;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0 0 8px 0;
+    }
+    .info-item p {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #444;
+      font-weight: 500;
+    }
+
+    .action-section {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+    }
+
+    .btn-book {
+      display: inline-block;
+      background: #e27d60;
+      color: white;
+      padding: 15px 40px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(226,125,96,0.3);
+    }
+    .btn-book:hover {
+      background: #d06d50;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(226,125,96,0.4);
+    }
+
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </a>
+    <div class="nav-links">
+      <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+    </div>
+  </header>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <a href="{{ url_for('dashboard') }}" class="back-link">&larr; Back</a>
+      <div class="avatar" style="overflow: hidden;">
+        {% if doctor.photo_base64 %}
+          <img src="data:image/jpeg;base64,{{ doctor.photo_base64 }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+          👨‍⚕️
+        {% endif %}
+      </div>
+      <h1>Dr. {{ doctor.name }}</h1>
+      <p>{{ doctor.degree if doctor.degree else "Specialist" }}</p>
+    </div>
+
+    <div class="profile-body">
+      <div class="info-grid">
+        <div class="info-item">
+          <h3>Email Address</h3>
+          <p>{{ doctor.email }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Phone Number</h3>
+          <p>{{ doctor.phone if doctor.phone else "Not provided" }}</p>
+        </div>
+        <div class="info-item">
+          <h3>Clinic / Hospital Address</h3>
+          <p>{{ doctor.address if doctor.address else "Not provided" }}</p>
+        </div>
+      </div>
+      
+      <!-- Public Calendar View -->
+      <div class="info-item" style="grid-column: 1 / -1; margin-top: 20px; text-align: center;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Available Dates</h3>
+        <div style="max-width: 400px; margin: 0 auto;">
+          <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 600;">
+            <button onclick="changeMonth(-1)" style="width: auto; padding: 5px 10px; background: #eee; color: #333; border: none; border-radius: 5px; cursor: pointer;">&larr;</button>
+            <span id="monthYear"></span>
+            <button onclick="changeMonth(1)" style="width: auto; padding: 5px 10px; background: #eee; color: #333; border: none; border-radius: 5px; cursor: pointer;">&rarr;</button>
+          </div>
+          <div class="calendar-grid" id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
+            <!-- Calendar injected here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="action-section" style="margin-top: 30px;">
+        <p style="color: #666; margin-bottom: 20px;">Select a green available date on the calendar above to request a booking.</p>
+        
+        {% if children %}
+        <div style="margin-bottom: 20px;">
+          <label style="font-weight: 600; color: #444; margin-right: 10px;">Select Child:</label>
+          <select id="childSelect" style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Inter';">
+            <option value="" disabled selected>Choose a child profile...</option>
+            {% for child in children %}
+            <option value="{{ child._id }}">{{ child.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button id="bookBtn" class="btn-book" style="background: #ccc; pointer-events: none; border: none; font-family: 'Inter'; cursor: pointer;" onclick="bookAppointment()">Select a Date First</button>
+        {% else %}
+        <p style="color: #e27d60; font-weight: 600;">You need to add a child profile from your dashboard before you can book an appointment.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+<script>
+  let currentDate = new Date();
+  let availableDates = new Set({{ (doctor.available_dates if doctor and doctor.available_dates else []) | tojson }});
+  let selectedDateStr = null;
+  
+  function renderCalendar() {
+    const grid = document.getElementById('calendarGrid');
+    const monthYear = document.getElementById('monthYear');
+    grid.innerHTML = '';
+    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    monthYear.innerText = `${months[month]} ${year}`;
+    
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    days.forEach(day => {
+      grid.innerHTML += `<div style="font-size: 0.8rem; color: #888; font-weight: 600; padding-bottom: 5px;">${day}</div>`;
+    });
+    
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    
+    for(let i = 0; i < firstDay; i++) {
+      grid.innerHTML += `<div></div>`;
+    }
+    
+    for(let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const dayDate = new Date(year, month, day);
+      const isPast = dayDate < today;
+      const isAvailable = availableDates.has(dateStr);
+      const isSelected = selectedDateStr === dateStr;
+      
+      let style = "padding: 10px 0; border-radius: 8px; font-size: 0.95rem; border: 1px solid transparent;";
+      
+      if(isPast) {
+        style += " color: #ccc; background: #fafafa; cursor: not-allowed;";
+      } else if(isSelected) {
+        style += " background: #2e7d32; color: white; font-weight: bold; cursor: pointer; border-color: #1b5e20;";
+      } else if(isAvailable) {
+        style += " background: #4caf50; color: white; cursor: pointer; border-color: #388e3c;";
+      } else {
+        style += " background: #f9f9f9; border-color: #eee; cursor: not-allowed;";
+      }
+      
+      grid.innerHTML += `<div style="${style}" ${!isPast && isAvailable ? `onclick="selectDate('${dateStr}')"` : ''}>${day}</div>`;
+    }
+  }
+  
+  function changeMonth(dir) {
+    currentDate.setMonth(currentDate.getMonth() + dir);
+    renderCalendar();
+  }
+  
+  function selectDate(dateStr) {
+    selectedDateStr = dateStr;
+    renderCalendar();
+    
+    const btn = document.getElementById('bookBtn');
+    if (btn) {
+      btn.style.background = '#e27d60';
+      btn.style.pointerEvents = 'auto';
+      btn.innerText = `Book Appointment for ${dateStr}`;
+    }
+  }
+
+  function bookAppointment() {
+    if (!selectedDateStr) return;
+    
+    const childSelect = document.getElementById('childSelect');
+    const childId = childSelect.value;
+    
+    if (!childId) {
+      alert("Please select a child profile for the appointment.");
+      return;
+    }
+    
+    const btn = document.getElementById('bookBtn');
+    btn.innerText = "Booking...";
+    btn.style.pointerEvents = 'none';
+    
+    fetch('/api/book_appointment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        doctor_id: "{{ doctor._id }}",
+        child_id: childId,
+        date: selectedDateStr
+      })
+    })
+    .then(res => res.json().then(data => ({status: res.status, body: data})))
+    .then(result => {
+      if (result.status === 200) {
+        alert("Success! Your appointment has been booked. You can view it on your dashboard.");
+        window.location.href = "{{ url_for('dashboard') }}";
+      } else {
+        alert("Error: " + (result.body.error || "Failed to book appointment."));
+        btn.innerText = `Book Appointment for ${selectedDateStr}`;
+        btn.style.pointerEvents = 'auto';
+      }
+    })
+    .catch(err => {
+      alert("A network error occurred.");
+      btn.innerText = `Book Appointment for ${selectedDateStr}`;
+      btn.style.pointerEvents = 'auto';
+    });
+  }
+
+  // Initial render
+  renderCalendar();
+</script>
+
+{% include 'chatbot.html' %}
+</body>
+</html>

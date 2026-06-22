@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ child.name }}'s Progress | AutiScan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <!-- Include Chart.js for Game Progress Chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: #fdfaf8; font-family: 'Inter', sans-serif; margin: 0; padding: 0; color: #333;}
+    .navbar { background: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.03); }
+    .logo {font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 8px; text-decoration: none; color: #333;}
+    .logo-icon { background: #e27d60; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center;}
+    .nav-links a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover { color: #e27d60; }
+    
+    .dashboard-container { max-width: 1100px; margin: 3rem auto; padding: 0 20px;}
+    .header-section { margin-bottom: 2rem; border-bottom: 2px solid #f4ece6; padding-bottom: 1.5rem; }
+    .header-section h1 { font-size: 2.2rem; color: #2c3e50; margin: 0 0 10px 0; }
+    .header-section p { color: #666; font-size: 1.1rem; margin: 0; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #e27d60; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+    
+    .grid-container { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+    @media(max-width: 800px){ .grid-container { grid-template-columns: 1fr; } }
+    
+    .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.04); margin-bottom: 30px; }
+    .card h2 { margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5rem; border-bottom: 1px solid #f4ece6; padding-bottom: 10px; }
+    
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; background: #fafaf9; color: #555; font-weight: 600; border-bottom: 2px solid #eee; }
+    td { padding: 12px; border-bottom: 1px solid #eee; color: #444; }
+    .risk-high { background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 6px; font-weight: 600;font-size: 0.85rem;}
+    .risk-moderate { background: #fff3e0; color: #ef6c00; padding: 4px 8px; border-radius: 6px; font-weight: 600;font-size: 0.85rem;}
+    .risk-low { background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 6px; font-weight: 600;font-size: 0.85rem;}
+    
+    .recommendation-box { background: linear-gradient(135deg, #fef4f1, #ffffff); border: 2px solid #fbece7; border-left: 5px solid #e27d60; padding: 25px; border-radius: 12px; }
+    .recommendation-box h3 { color: #e27d60; margin: 0 0 10px 0; }
+    .recommendation-box p { color: #333; line-height: 1.6; margin: 0; }
+    
+    .empty-state { text-align: center; color: #888; padding: 20px 0; }
+    
+    .btn-edit { background: white; color: #e27d60; padding: 8px 18px; border-radius: 20px; text-decoration: none; font-weight: 600; border: 2px solid #e27d60; cursor: pointer; transition: 0.3s; margin-top: 10px; display: inline-block;}
+    .btn-edit:hover { background: #e27d60; color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(226,125,96,0.2); }
+
+    /* Modal styles */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+    .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #999; }
+    .close-btn:hover { color: #333; }
+    .modal input, .modal select { width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: 'Inter'; }
+    .modal label { font-weight: 600; font-size: 0.9rem; color: #444; }
+    .modal button { width: 100%; padding: 12px; background: #e27d60; color: white; border: none; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+    .modal button:hover { background: #d06d50; }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="/" class="logo">
+      <div class="logo-icon">♡</div>
+      <span>AutiScan</span>
+    </a>
+    <div class="nav-links">
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </header>
+
+  <div class="dashboard-container">
+    <a href="{{ url_for('dashboard') }}" class="back-link">&larr; Back to Dashboard</a>
+    
+    <div class="header-section" style="display: flex; align-items: center; gap: 20px;">
+      <div style="width: 100px; height: 100px; border-radius: 50%; background: #eee; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        {% if child.photo_base64 %}
+          <img src="data:image/jpeg;base64,{{ child.photo_base64 }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+          <span style="font-size: 2.5rem; color: #ccc;">👤</span>
+        {% endif %}
+      </div>
+      <div>
+        <h1>{{ child.name }}'s Progress</h1>
+        <p>Age: {{ child.age }} | Gender: {{ child.gender }} | Tracking ID: {{ child._id }}</p>
+        {% if current_user_role == 'parent' %}
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-edit" onclick="openEditModal()">Edit Child Profile</button>
+          <button class="btn-edit" style="border-color: #e74c3c; color: #e74c3c;" onclick="deleteChild('{{ child._id }}')">Delete Profile</button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <div class="main-column">
+        
+        <div class="card">
+          <h2>Assessment History</h2>
+          {% if assessments %}
+            <div style="overflow-x: auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date Taken</th>
+                    <th>Score</th>
+                    <th>Risk Level</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for a in assessments %}
+                  <tr>
+                    <td>{{ a.date.strftime('%d %b %Y, %I:%M %p') if a.date else 'Unknown' }}</td>
+                    <td>{{ a.percent }}%</td>
+                    <td>
+                      {% if a.percent >= 60 %}
+                        <span class="risk-high">{{ a.spectrum }}</span>
+                      {% elif a.percent >= 40 %}
+                        <span class="risk-moderate">{{ a.spectrum }}</span>
+                      {% else %}
+                        <span class="risk-low">{{ a.spectrum }}</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <small style="color: #777;">Ans: {{ a.answers }}</small>
+                      {% if a.shap_insights %}
+                        <div style="margin-top: 12px; padding: 15px; background-color: #fafbfc; border-radius: 12px; border: 1px solid #e1e4e8; box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);">
+                          <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <span style="font-size: 1.2rem; margin-right: 8px;">🤖</span>
+                            <span style="font-weight: 700; color: #24292e; font-size: 0.95rem;">AI Behavior Analysis</span>
+                          </div>
+                          
+                          {% if a.shap_insights.top_positive %}
+                            <div style="margin-bottom: 10px;">
+                              <span style="font-size: 0.75rem; color: #d73a49; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Key Risk Indicators:</span>
+                              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                              {% for factor in a.shap_insights.top_positive %}
+                                <div style="background-color: #fff; border: 1px solid #fdaeb7; color: #24292e; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                                  <span style="font-weight: 500;">{{ factor.name }}</span>
+                                  <span style="background-color: #d73a49; color: white; padding: 2px 8px; border-radius: 10px; font-weight: 700; font-size: 0.7rem; box-shadow: 0 1px 2px rgba(215,58,73,0.3);">+{{ factor.impact_percent }}%</span>
+                                </div>
+                              {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+                          
+                          {% if a.shap_insights.top_negative %}
+                            <div>
+                              <span style="font-size: 0.75rem; color: #28a745; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Positive Signs:</span>
+                              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                              {% for factor in a.shap_insights.top_negative %}
+                                <div style="background-color: #fff; border: 1px solid #85e89d; color: #24292e; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                                  <span style="font-weight: 500;">{{ factor.name }}</span>
+                                  <span style="background-color: #28a745; color: white; padding: 2px 8px; border-radius: 10px; font-weight: 700; font-size: 0.7rem; box-shadow: 0 1px 2px rgba(40,167,69,0.3);">-{{ factor.impact_percent }}%</span>
+                                </div>
+                              {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="empty-state">No assessments have been recorded yet. Select this child on the Screening page to record one.</div>
+          {% endif %}
+        </div>
+
+        <div class="card">
+          <h2>Game Progress</h2>
+          {% if games %}
+             <div style="overflow-x: auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date Played</th>
+                    <th>Game Name</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for g in games %}
+                  <tr>
+                    <td>{{ g.date.strftime('%d %b %Y, %I:%M %p') if g.date else 'Unknown' }}</td>
+                    <td><strong>{{ g.game_name }}</strong></td>
+                    <td>{{ g.score }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="empty-state">No therapeutic games played yet. Have the child play games from the Games Hub to track progress here.</div>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div class="side-column">
+        <div class="recommendation-box">
+          <h3>What to do next</h3>
+          <p>{{ recommendation }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Child Modal -->
+  <div id="editChildModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeEditModal()">&times;</span>
+      <h2 style="margin-top: 0; color: #2c3e50; font-size: 1.5rem;">Edit Child Profile</h2>
+      <form action="{{ url_for('edit_child', child_id=child._id) }}" method="POST" enctype="multipart/form-data">
+        <label>Profile Photo</label>
+        <input type="file" name="photo" accept="image/*" style="padding: 10px; margin-bottom: 15px; border: 1px dashed #ccc; border-radius: 8px; width: 100%;">
+        
+        <label>Full Name</label>
+        <input type="text" name="name" required value="{{ child.name }}">
+        
+        <label>Age</label>
+        <input type="number" name="age" required min="1" max="18" value="{{ child.age }}">
+        
+        <label>Gender</label>
+        <select name="gender" required id="genderSelect">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        
+        <button type="submit">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function deleteChild(childId) {
+      if(!confirm("WARNING: Are you sure you want to permanently delete this child's profile? All their screening tests, game scores, and upcoming appointments will be erased. This cannot be undone.")) return;
+      
+      fetch(`/api/delete_child/${childId}`, { method: 'POST' })
+      .then(res => res.json())
+      .then(data => {
+        alert("Child profile deleted.");
+        window.location.href = "{{ url_for('dashboard') }}";
+      })
+      .catch(err => alert("Error deleting child."));
+    }
+
+    // Pre-select gender
+    document.getElementById('genderSelect').value = "{{ child.gender }}";
+
+    function openEditModal() {
+      document.getElementById('editChildModal').style.display = 'flex';
+    }
+    function closeEditModal() {
+      document.getElementById('editChildModal').style.display = 'none';
+    }
+    window.onclick = function(event) {
+      if (event.target == document.getElementById('editChildModal')) {
+        closeEditModal();
+      }
+    }
+  </script>
+{% include 'chatbot.html' %}
+</body>
+</html>
