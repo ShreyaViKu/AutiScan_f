@@ -16,11 +16,13 @@ import shap
 
 from authlib.integrations.flask_client import OAuth
 from bson.objectid import ObjectId
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configure Gemini
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
