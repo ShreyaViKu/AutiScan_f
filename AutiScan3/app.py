@@ -165,7 +165,12 @@ def logout():
 
 @app.route('/login/google')
 def login_google():
-    redirect_uri = url_for('authorize_google', _external=True)
+    if 'localhost' in request.host or '127.0.0.1' in request.host:
+        redirect_uri = url_for('authorize_google', _external=True)
+    else:
+        # Enforce HTTPS and use the public proxy host header for cloud deployments (Hugging Face / Render)
+        host = request.headers.get('X-Forwarded-Host') or request.host
+        redirect_uri = f"https://{host}/authorize/google"
     return google.authorize_redirect(redirect_uri)
 
 @app.route('/authorize/google')
