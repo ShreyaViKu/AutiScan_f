@@ -35,7 +35,7 @@ graph TD
 * The dataset represents screening results containing Q-CHAT-10 / AQ-10 questions.
 * **Features (14 inputs)**:
   * `A1_Score` to `A10_Score`: 10 binary behavioral/sensory questionnaire answers (0 = Typical, 1 = Indicative of autistic traits).
-  * `age`: Child's age in months.
+  * `age`: Child's age in years.
   * `gender`: Mapped to `1` (Male) or `0` (Female).
   * `jundice`: History of neonatal jaundice mapped to `1` (Yes) or `0` (No).
   * `austim`: Immediate family history of autism mapped to `1` (Yes) or `0` (No).

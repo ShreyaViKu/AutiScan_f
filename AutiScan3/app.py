@@ -1137,7 +1137,7 @@ def download_pdf():
 
     '''
     content.append(Paragraph(f"Name: {name}", styles['Normal']))  
-    content.append(Paragraph(f"Age: {age}", styles['Normal']))
+    content.append(Paragraph(f"Age: {age} Years", styles['Normal']))
     content.append(Paragraph(f"Gender: {'Male' if gender == 1 else 'Female'}", styles['Normal']))
     content.append(Paragraph(f"Jaundice: {'Yes' if jundice == 1 else 'No'}", styles['Normal']))
     content.append(Paragraph(f"Family History of Autism: {'Yes' if austim == 1 else 'No'}", styles['Normal']))
@@ -1146,7 +1146,7 @@ def download_pdf():
     content.append(Spacer(1, 5))
 
     content.append(Paragraph(f"Name: {name}", styles['Normal']))  
-    content.append(Paragraph(f"Age: {age}", styles['Normal']))
+    content.append(Paragraph(f"Age: {age} Years", styles['Normal']))
     content.append(Paragraph(f"Gender: {'Male' if gender == 1 else 'Female'}", styles['Normal']))
     content.append(Paragraph(f"Jaundice at Birth: {'Yes' if jundice == 1 else 'No'}", styles['Normal']))
     content.append(Paragraph(f"Family History: {'Yes' if austim == 1 else 'No'}", styles['Normal']))

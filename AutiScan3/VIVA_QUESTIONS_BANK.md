@@ -23,7 +23,7 @@ This document contains a comprehensive bank of technical questions that an exami
   The final probability is the arithmetic mean of the probabilities predicted by the three models.
 
 ### Q3: What is "Feature Scaling" and why did you use `StandardScaler`?
-* **Easy Answer**: Different inputs have different ranges (e.g., age is 12–120 months, while scores are 0 or 1). Feature scaling normalizes these inputs so the neural network doesn't give extra importance to larger numbers.
+* **Easy Answer**: Different inputs have different ranges (e.g., age is 1–18 years, while scores are 0 or 1). Feature scaling normalizes these inputs so the neural network doesn't give extra importance to larger numbers.
 * **Technical Explanation**: Algorithms like Gradient Descent in MLP and regularization in Logistic Regression are sensitive to feature scales. `StandardScaler` standardizes features by removing the mean and scaling to unit variance ($z = \frac{x - \mu}{\sigma}$), ensuring all features contribute equally. (Decision trees in Random Forest are scale-invariant, but scaling is vital for the other two models in our ensemble).
 
 ### Q4: What is SHAP and why is it important in medical/clinical screening?
